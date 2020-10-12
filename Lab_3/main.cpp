@@ -20,7 +20,7 @@ class Person{
 struct node{
   Person person;
   node*right = nullptr;
-  node*left =nullptr;
+  node*left = nullptr;
 };
 
 class Book{
@@ -30,7 +30,7 @@ class Book{
   public:
     Book(){//constructor
       size=0;
-      root=nullptr;
+      root = nullptr;
     } 
     //~Book(); //Destructor FIXME
     node* getRoot(){
@@ -44,7 +44,7 @@ class Book{
       temp->person.phone=number;
       temp->left=nullptr;
       temp->right=nullptr;
-      if(root==nullptr){
+      if(root == nullptr){
         root = temp;
       }
       else{
@@ -129,34 +129,13 @@ class Book{
     }
     //returns the number of the person
     double Find(node* root, string first, string last){
-      if(root == nullptr)
+      node* found = Search(getRoot(),first, last);
+      if(found == nullptr)
       {
-        return 0;
+        //FIXME some sort of error messaging  //error propogation
+        //return here
       }
-      else
-      {
-        if(last.compare(root->person.last_name)== 0 && first.compare(root->person.first_name)==0)
-        {
-          return (root->person.phone);
-        }
-        else if (last.compare(root->person.last_name)<0)
-        {
-          return Find(root->left,first,last);
-        }
-        else if (last.compare(root->person.last_name)>0)
-        {
-          return Find(root->right,first,last);
-        }
-        else if (first.compare(root->person.first_name)<0)
-        {
-          return Find(root->left,first,last);
-        }
-        else if (first.compare(root->person.first_name)>0)
-        {
-          return Find(root->right,first,last);
-        }
-      }
-      
+      return found->person.phone;
     }
     node* Search(node* root, string first, string last)
     {
@@ -195,14 +174,30 @@ class Book{
       node* found = Search(getRoot(),first,last);
       if(found == nullptr)
       {
-        //FIXME some sort of error messaging// error propogation
+        //FIXME some sort of error messaging  //error propogation
         //return here
       }
       found->person.phone = new_number;
     }
-    //dump the whole list in alphabetical order
-    void Display(){
-      
+    //dump the whole list in alphabetical order 
+    void Display(node* root){
+      //using Inorder traversal
+      if(root != nullptr)
+      {
+        Display(root->left);
+        cout << "LastName: "+root->person.last_name +"    FirstName: "+ root->person.first_name+ "    Number: "<<root->person.phone<<endl;
+        Display(root->right);
+      }
+    }
+    void Quit(node* root){
+      //Dump the list using Preorder
+      if (root != nullptr)
+      {
+        //Dump The list into dummy file
+        //FIXME
+        Quit(root->left);
+        Quit(root->right);
+      }
     }
 };
 
@@ -218,11 +213,13 @@ int main()
 {
   Book book;
   //STILL TESTING
+  //node * rootinMain = book.getRoot();
   Person myperson;
   book.Add(book.getRoot(),"Igum","Patel",5131234569);
   book.Add(book.getRoot(),"Greg","Barker",5131234567);
   book.Add(book.getRoot(),"Brendo","Parker",5130123456);
   book.Add(book.getRoot(),"Minglio","Zarkyr",5130123455);
+  book.Display(book.getRoot());
 
   int number = 0;
         
