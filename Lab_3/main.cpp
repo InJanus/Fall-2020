@@ -122,11 +122,76 @@ class Book{
       
 
     }
-    //Delete the node I think [FIXME]
-    //delete should maybe return a value to see if it was deleted or not.
-    void Delete(string first, string last){
+        // Given a binary search tree, return the node with minimum 
+    // value found in that tree. This will be used in delete with two children
+    struct node * minNode(struct node* node) 
+    { 
+        struct node* current = node; 
+      
+        // loop down to find the leftmost leaf 
+        while (current && current->left != NULL) 
+            current = current->left; 
+      
+        return current; 
+    } 
 
+    //Delete the node but to check if it works return the new root
+    struct node* deleteNode(struct node* root, string last ,string first){ 
+    // bootstrap case 
+    if (root == NULL){
+      return root;
+    } 
+  
+    // Last name less than 
+    if (last < root->person.last_name){
+      root->left = deleteNode(root->left, last, first); 
     }
+  
+    // Last name greater than
+    else if (last > root->person.last_name){
+      root->right = deleteNode(root->right, last, first); 
+    }
+  
+    // last name is the same as root's last name, then check first
+    else{ 
+      //First Name less
+      if (first < root->person.first_name){
+        root->left = deleteNode(root->left, last, first); 
+      }
+  
+      // First Name greater
+      else if (first > root->person.first_name){
+        root->right = deleteNode(root->right, last, first); 
+      }
+  
+        // if last name is the same as root's last name, then delete this node 
+        else{ 
+            // node with only one child or no child 
+            if (root->left == NULL){ 
+                struct node *temp = root->right; 
+                free(root); 
+                return temp; 
+            } 
+            else if (root->right == NULL) { 
+                struct node *temp = root->left; 
+                free(root); 
+                return temp; 
+            } 
+      
+            // node with two children: Get the inorder successor 
+            struct node* temp = minNode(root->right); 
+      
+            // Copy the inorder successor's content to this node 
+            root->person.last_name = temp->person.last_name; 
+            root->person.first_name = temp->person.first_name; 
+            root->person.phone = temp->person.phone; 
+
+            // Delete the inorder successor 
+            root->right = deleteNode(root->right, temp->person.last_name, temp->person.first_name); 
+        } 
+    }
+    return root; 
+} 
     //returns the number of the person
     double Find(node* root, string first, string last){
       node* found = Search(getRoot(),first, last);
