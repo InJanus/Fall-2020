@@ -37,8 +37,53 @@ class Book{
       return root;
     }
     //Adding an entire node basically
-    void Add(node* root,string first, string last,double number){
+    void Add(node* mynode,string first, string last,double number){
       node* temp = new node;
+      temp->person.first_name=first;
+      temp->person.last_name=last;
+      temp->person.phone=number;
+      temp->left=nullptr;
+      temp->right=nullptr;
+      if(root==nullptr){
+        root = temp;
+      }
+      else{
+        if(last.compare(mynode->person.last_name)<0)
+        {
+          if(mynode->left==nullptr)
+          {
+            mynode->left=temp;
+          }
+          else{
+            //Destroy Temp here? Because memory Leak
+            Add(mynode->left,first,last,number);
+          }
+        }
+        else if(last.compare(mynode->person.last_name)>0)
+        {
+          if(mynode->right ==nullptr)
+          {
+            mynode->right = temp;
+          }
+          else{
+            //Destroy Temp here? Because memory Leak
+            Add(mynode->right,first,last,number);
+          }
+        }
+        else{
+          //FIXME handle the same last name case here
+        }
+      }
+      
+
+    }
+
+    void Add(node* root, Person tempperson){
+      //copy of add above but with person instead of each indivitual item 
+      node* temp = new node;
+      string first = tempperson.first_name;
+      string last = tempperson.last_name;
+      double number = tempperson.phone;
       temp->person.first_name=first;
       temp->person.last_name=last;
       temp->person.phone=number;
@@ -78,6 +123,7 @@ class Book{
 
     }
     //Delete the node I think [FIXME]
+    //delete should maybe return a value to see if it was deleted or not.
     void Delete(string first, string last){
 
     }
@@ -156,7 +202,7 @@ class Book{
     }
     //dump the whole list in alphabetical order
     void Display(){
-    
+      
     }
 };
 
@@ -172,10 +218,59 @@ int main()
 {
   Book book;
   //STILL TESTING
+  Person myperson;
   book.Add(book.getRoot(),"Igum","Patel",5131234569);
   book.Add(book.getRoot(),"Greg","Barker",5131234567);
   book.Add(book.getRoot(),"Brendo","Parker",5130123456);
   book.Add(book.getRoot(),"Minglio","Zarkyr",5130123455);
+
+  int number = 0;
+        
+        
+  cout << "Lab 3" << endl;
+  cout << "1 - add user" << endl;
+  cout << "2 - delete person" << endl;
+  cout << "3 - find person" << endl;
+  cout << "4 - change person" << endl;
+  cout << "5 - display book" << endl;
+  cout << "6 - quit" << endl;
+
+  
+  while(number != 6){
+      cin >> number;
+
+      
+      switch(number){
+          case(1):
+            cout << "fname: ";
+            getline(cin, myperson.first_name);
+            cout << endl << "lname: ";
+            getline(cin, myperson.last_name);
+            cout << endl << "pnumber: ";
+            cin >> myperson.phone;
+            book.Add(book.getRoot(),myperson);
+            break;
+          case(2):
+            cout << "fname: ";
+            getline(cin, myperson.first_name);
+            cout << endl << "lname: ";
+            getline(cin, myperson.last_name);
+            book.Delete(myperson.first_name, myperson.last_name);
+            break;
+          case(3):
+            break;
+          case(4):
+            break;
+          case(5):
+            break;
+          case(6):
+            cout << "exiting..." << endl;
+            break;
+          default:
+              cout << "invalid selection!" << endl;
+              break;
+          }
+      }
 
   return 0;
 }
