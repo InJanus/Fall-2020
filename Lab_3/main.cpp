@@ -166,6 +166,7 @@ class Book{
           return Search(root->right,first,last);
         }
       }
+      return nullptr;
     }
 
 
@@ -214,35 +215,45 @@ class Book{
 
       
       while(number != 6){
+          cout << "Input: ";
           cin >> number;
 
           
           switch(number){
               case(1):
-                cout << "fname: ";
+                cin.clear();
+                fflush(stdin);
+                cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
                 cout << endl << "pnumber: ";
                 cin >> myperson.phone;
                 book.Add(book.getRoot(),myperson);
+                cout << "Added person" << endl;
                 break;
               case(2):
-                cout << "fname: ";
+                cin.clear();
+                fflush(stdin);
+                cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
                 book.Delete(myperson.first_name, myperson.last_name);
                 break;
               case(3):
-                cout << "fname: ";
+                cin.clear();
+                fflush(stdin);
+                cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
-                book.Find(book.getRoot(), myperson.first_name, myperson.last_name);
+                cout << "Phone number of found person: " << book.Find(book.getRoot(), myperson.first_name, myperson.last_name) << endl;
                 break;
               case(4):
-                cout << "fname: ";
+                cin.clear();
+                fflush(stdin);
+                cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
@@ -251,6 +262,7 @@ class Book{
                 book.Change(myperson.first_name, myperson.last_name, myperson.phone);
                 break;
               case(5):
+                book.Display(book.getRoot());
                 break;
               case(6):
                 cout << "exiting..." << endl;
@@ -262,14 +274,6 @@ class Book{
           }
         }
 };
-
-
-
-
-
-
-
-
 
 int main()
 {
