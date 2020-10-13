@@ -37,7 +37,7 @@ class Book{
       root = nullptr;
     } 
     ~Book(){
-      cout<<"no destructor statment implemented" << endl;
+      cout<< "no destructor statment implemented" << endl;
     }; //Destructor FIXME
     node* getRoot(){
       return root;
@@ -307,6 +307,7 @@ class Gui{
                 cout << myperson.phone;
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
+                //cout << "would you like to input person again? (y/n)";
                 break;
               //DELETE
               case(2):
