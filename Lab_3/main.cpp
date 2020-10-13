@@ -90,9 +90,7 @@ class Book{
       string first = tempperson.first_name;
       string last = tempperson.last_name;
       int number = tempperson.phone;
-      temp->person.first_name=first;
-      temp->person.last_name=last;
-      temp->person.phone=number;
+      temp->person=tempperson;
       temp->left=nullptr;
       temp->right=nullptr;
       if(root==nullptr){
