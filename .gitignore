@@ -1,1 +1,3 @@
-.vscode
+.vscode/c_cpp_properties.json
+.gitignore
+Lab_3/main.exe

@@ -9,7 +9,6 @@
 #include <fstream>
 using namespace std;
 
-
 class Person{
   public: 
     string last_name;
@@ -286,13 +285,11 @@ class Book{
       while(number != 6){
           cout << "Input: ";
           cin >> number;
-
-          
           switch(number){
               //Insert
               case(1):
                 cin.clear();
-                fflush(stdin);
+                fflush(stdin); //flush input
                 cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
