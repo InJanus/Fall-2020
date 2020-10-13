@@ -13,7 +13,7 @@ class Person{
   public: 
     string last_name;
     string first_name;
-    double phone;
+    int phone;
     Person(){  //constructor
       last_name = "Z";
       first_name = "A";
@@ -36,12 +36,14 @@ class Book{
       size=0;
       root = nullptr;
     } 
-    ~Book(); //Destructor FIXME
+    ~Book(){
+      cout<<"no destructor statment implemented" << endl;
+    }; //Destructor FIXME
     node* getRoot(){
       return root;
     }
     //Adding an entire node basically
-    void Add(node* mynode,string first, string last,double number){
+    void Add(node* mynode,string first, string last,int number){
       node* temp = new node;
       temp->person.first_name=first;
       temp->person.last_name=last;
@@ -82,12 +84,12 @@ class Book{
 
     }
 
-    void Add(node* root, Person tempperson){
+    void Add(node* mynode, Person tempperson){
       //copy of add above but with person instead of each indivitual item 
       node* temp = new node;
       string first = tempperson.first_name;
       string last = tempperson.last_name;
-      double number = tempperson.phone;
+      int number = tempperson.phone;
       temp->person.first_name=first;
       temp->person.last_name=last;
       temp->person.phone=number;
@@ -97,26 +99,26 @@ class Book{
         root = temp;
       }
       else{
-        if(last.compare(root->person.last_name)<0)
+        if(last.compare(mynode->person.last_name)<0)
         {
-          if(root->left==nullptr)
+          if(mynode->left==nullptr)
           {
-            root->left=temp;
+            mynode->left=temp;
           }
           else{
             //Destroy Temp here? Because memory Leak
-            Add(root->left,first,last,number);
+            Add(mynode->left,first,last,number);
           }
         }
-        else if(last.compare(root->person.last_name)>0)
+        else if(last.compare(mynode->person.last_name)>0)
         {
-          if(root->right ==nullptr)
+          if(mynode->right ==nullptr)
           {
-            root->right = temp;
+            mynode->right = temp;
           }
           else{
             //Destroy Temp here? Because memory Leak
-            Add(root->right,first,last,number);
+            Add(mynode->right,first,last,number);
           }
         }
         else{
@@ -196,7 +198,7 @@ class Book{
     return root; 
 } 
     //returns the number of the person
-    double Find(node* root, string first, string last){
+    int Find(node* root, string first, string last){
       node* found = Search(getRoot(),first, last);
       if(found == nullptr)
       {
@@ -238,7 +240,7 @@ class Book{
     }
 
 
-    void Change(string first, string last, double new_number){
+    void Change(string first, string last, int new_number){
       //prolly use Search to make this easier
       node* found = Search(getRoot(),first,last);
       if(found == nullptr)
@@ -249,13 +251,13 @@ class Book{
       found->person.phone = new_number;
     }
     //dump the whole list in alphabetical order 
-    void Display(node* root){
+    void Display(node* mynode){
       //using Inorder traversal
-      if(root != nullptr)
+      if(mynode != nullptr)
       {
-        Display(root->left);
-        cout << "LastName: "+root->person.last_name +"    FirstName: "+ root->person.first_name+ "    Number: "<<root->person.phone<<endl;
-        Display(root->right);
+        Display(mynode->left);
+        cout << "LastName: "+mynode->person.last_name +"    FirstName: "+ mynode->person.first_name + "    Number: "<< mynode->person.phone <<endl;
+        Display(mynode->right);
       }
     }
     void Quit(node* root, ofstream& outfile){
@@ -267,9 +269,12 @@ class Book{
       }
     }
     //User Interface 
-    void gui(){
+};
+
+class Gui{
+  public:
+    Gui(Book book){
       Person myperson;
-      Book book = *this;
       int number = 0; 
       
       //Choices the Users have
@@ -281,8 +286,9 @@ class Book{
       cout << "5 - display book" << endl;
       cout << "6 - quit" << endl;
 
-
       while(number != 6){
+          cin.clear();
+          fflush(stdin);
           cout << "Input: ";
           cin >> number;
           switch(number){
@@ -295,7 +301,10 @@ class Book{
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
                 cout << endl << "pnumber: ";
+                cin.clear();
+                fflush(stdin);
                 cin >> myperson.phone;
+                cout << myperson.phone;
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
                 break;
@@ -328,11 +337,14 @@ class Book{
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
                 cout << endl << "pnumber: ";
+                cin.clear();
+                fflush(stdin);
                 cin >> myperson.phone;
                 book.Change(myperson.first_name, myperson.last_name, myperson.phone);
                 break;
               //DISPLAY
               case(5):
+                cout << "Displaying PhoneBook" << endl;
                 book.Display(book.getRoot());
                 break;
               //QUIT
@@ -345,15 +357,15 @@ class Book{
               }
           }
         }
-};
+    };
 
 int main(){
   ofstream outfile;
   outfile.open("PhoneBook.txt");
   Book book;
+  Gui newgui(book);
   //STILL TESTING
   //node * rootinMain = book.getRoot();
-  book.gui();
   outfile.close();
   return 0;
 }
