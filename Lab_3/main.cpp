@@ -122,7 +122,7 @@ class Book{
       
 
     }
-        // Given a binary search tree, return the node with minimum 
+    // Given a binary search tree, return the node with minimum 
     // value found in that tree. This will be used in delete with two children
     struct node * minNode(struct node* node) 
     { 
