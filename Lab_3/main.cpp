@@ -304,7 +304,7 @@ class Book{
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
-                book.Delete(myperson.first_name, myperson.last_name);
+                //book.Delete(myperson.first_name, myperson.last_name);       //delete implementation? delete node? what is it?
                 break;
               case(3):
                 cin.clear();
