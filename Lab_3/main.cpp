@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <stdio.h>
+#include <fstream>
 using namespace std;
 
 
@@ -14,7 +15,11 @@ class Person{
     string last_name;
     string first_name;
     double phone;
-    //[FIXME] Need a constructor here
+    Person(){  //constructor
+      last_name = "Z";
+      first_name = "A";
+      phone = 1111111111;
+    }
 };
 
 struct node{
@@ -32,7 +37,7 @@ class Book{
       size=0;
       root = nullptr;
     } 
-    //~Book(); //Destructor FIXME
+    ~Book(); //Destructor FIXME
     node* getRoot(){
       return root;
     }
@@ -124,7 +129,7 @@ class Book{
     }
     // Given a binary search tree, return the node with minimum 
     // value found in that tree. This will be used in delete with two children
-    struct node * minNode(struct node* node) 
+    node* minNode(node* node) 
     { 
         struct node* current = node; 
       
@@ -136,7 +141,7 @@ class Book{
     } 
 
     //Delete the node but to check if it works return the new root
-    struct node* deleteNode(struct node* root, string last ,string first){ 
+    node* Delete(node* root, string last ,string first){ 
     // bootstrap case 
     if (root == NULL){
       return root;
@@ -144,24 +149,24 @@ class Book{
   
     // Last name less than 
     if (last < root->person.last_name){
-      root->left = deleteNode(root->left, last, first); 
+      root->left = Delete(root->left, last, first); 
     }
   
     // Last name greater than
     else if (last > root->person.last_name){
-      root->right = deleteNode(root->right, last, first); 
+      root->right = Delete(root->right, last, first); 
     }
   
     // last name is the same as root's last name, then check first
     else{ 
       //First Name less
       if (first < root->person.first_name){
-        root->left = deleteNode(root->left, last, first); 
+        root->left = Delete(root->left, last, first); 
       }
   
       // First Name greater
       else if (first > root->person.first_name){
-        root->right = deleteNode(root->right, last, first); 
+        root->right = Delete(root->right, last, first); 
       }
   
         // if last name is the same as root's last name, then delete this node 
@@ -187,7 +192,7 @@ class Book{
             root->person.phone = temp->person.phone; 
 
             // Delete the inorder successor 
-            root->right = deleteNode(root->right, temp->person.last_name, temp->person.first_name); 
+            root->right = Delete(root->right, temp->person.last_name, temp->person.first_name); 
         } 
     }
     return root; 
@@ -265,11 +270,13 @@ class Book{
         Quit(root->right);
       }
     }
+    //User Interface 
     void gui(){
       Person myperson;
       Book book = *this;
       int number = 0; 
-        
+      
+      //Choices the Users have
       cout << "Lab 3" << endl;
       cout << "1 - add user" << endl;
       cout << "2 - delete person" << endl;
@@ -278,13 +285,14 @@ class Book{
       cout << "5 - display book" << endl;
       cout << "6 - quit" << endl;
 
-      
+
       while(number != 6){
           cout << "Input: ";
           cin >> number;
 
           
           switch(number){
+              //Insert
               case(1):
                 cin.clear();
                 fflush(stdin);
@@ -297,6 +305,7 @@ class Book{
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
                 break;
+              //DELETE
               case(2):
                 cin.clear();
                 fflush(stdin);
@@ -304,8 +313,9 @@ class Book{
                 getline(cin, myperson.first_name);
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
-                //book.Delete(myperson.first_name, myperson.last_name);       //delete implementation? delete node? what is it?
+                book.Delete(book.getRoot() , myperson.last_name, myperson.first_name);
                 break;
+              //FIND
               case(3):
                 cin.clear();
                 fflush(stdin);
@@ -315,6 +325,7 @@ class Book{
                 getline(cin, myperson.last_name);
                 cout << "Phone number of found person: " << book.Find(book.getRoot(), myperson.first_name, myperson.last_name) << endl;
                 break;
+              //CHANGE
               case(4):
                 cin.clear();
                 fflush(stdin);
@@ -326,9 +337,11 @@ class Book{
                 cin >> myperson.phone;
                 book.Change(myperson.first_name, myperson.last_name, myperson.phone);
                 break;
+              //DISPLAY
               case(5):
                 book.Display(book.getRoot());
                 break;
+              //QUIT
               case(6):
                 cout << "exiting..." << endl;
                 break;
