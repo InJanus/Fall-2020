@@ -129,8 +129,7 @@ class Book{
     }
     // Given a binary search tree, return the node with minimum 
     // value found in that tree. This will be used in delete with two children
-    node* minNode(node* node) 
-    { 
+    node* minNode(node* node) { 
         struct node* current = node; 
       
         // loop down to find the leftmost leaf 
@@ -260,14 +259,12 @@ class Book{
         Display(root->right);
       }
     }
-    void Quit(node* root){
-      //Dump the list using Preorder
-      if (root != nullptr)
-      {
-        //Dump The list into dummy file
-        //FIXME
-        Quit(root->left);
-        Quit(root->right);
+    void Quit(node* root, ofstream& outfile){
+      //Dump the list into a text file
+      if (root != nullptr){
+        outfile << root->person.last_name +","+ root->person.first_name+ ","<< root->person.phone << endl;
+        Quit(root->left, outfile);
+        Quit(root->right, outfile);
       }
     }
     //User Interface 
@@ -353,11 +350,13 @@ class Book{
         }
 };
 
-int main()
-{
+int main(){
+  ofstream outfile;
+  outfile.open("PhoneBook.txt");
   Book book;
   //STILL TESTING
   //node * rootinMain = book.getRoot();
   book.gui();
+  outfile.close();
   return 0;
 }
