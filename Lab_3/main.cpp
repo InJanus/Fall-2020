@@ -48,7 +48,7 @@ public:
   }
   ~Book()
   {
-    cout << "no destructor statment implemented" << endl;
+    destroy(getRoot());
   }; //Destructor FIXME
   node *getRoot()
   {
@@ -290,7 +290,8 @@ public:
   void Restore(ifstream &infile)
   {
     Person temp;
-    root = nullptr; //clear out tree
+    destroy(getRoot()); //clear out tree
+    root=nullptr;
     string line;
     while (getline(infile,line))
     {
@@ -309,6 +310,13 @@ public:
         //cout << temp.first_name << temp.last_name << temp.phone << endl;
         Add(getRoot(), temp);
       }
+    }
+  }
+  void destroy(node* mynode){
+    if(mynode){
+      destroy(mynode->left);
+      destroy(mynode->right);
+      delete mynode;
     }
   }
 };
