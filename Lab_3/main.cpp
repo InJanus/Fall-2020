@@ -13,7 +13,7 @@ class Person{
   public: 
     string last_name;
     string first_name;
-    int phone;
+    unsigned long long int phone;
     Person(){  //constructor
       last_name = "Z";
       first_name = "A";
@@ -43,7 +43,7 @@ class Book{
       return root;
     }
     //Adding an entire node basically
-    void Add(node* mynode,string first, string last,int number){
+    void Add(node* mynode,string first, string last,unsigned long long int number){
       node* temp = new node;
       temp->person.first_name=first;
       temp->person.last_name=last;
@@ -89,7 +89,7 @@ class Book{
       node* temp = new node;
       string first = tempperson.first_name;
       string last = tempperson.last_name;
-      int number = tempperson.phone;
+      unsigned long long int number = tempperson.phone;
       temp->person=tempperson;
       temp->left=nullptr;
       temp->right=nullptr;
@@ -238,7 +238,7 @@ class Book{
     }
 
 
-    void Change(string first, string last, int new_number){
+    void Change(string first, string last, unsigned long long int new_number){
       //prolly use Search to make this easier
       node* found = Search(getRoot(),first,last);
       if(found == nullptr)
@@ -271,7 +271,7 @@ class Book{
 
 class Gui{
   public:
-    Gui(Book book){
+    Gui(Book book, ofstream outfile){
       Person myperson;
       int number = 0; 
       
@@ -294,15 +294,12 @@ class Gui{
               case(1):
                 cin.clear();
                 fflush(stdin); //flush input
-                cout << endl << "fname: ";
-                getline(cin, myperson.first_name);
-                cout << endl << "lname: ";
-                getline(cin, myperson.last_name);
-                cout << endl << "pnumber: ";
-                cin.clear();
-                fflush(stdin);
+                cout << "fname: ";
+                getline (cin, myperson.first_name);
+                cout << "lname: ";
+                getline (cin, myperson.last_name);
+                cout << "pnumber: ";
                 cin >> myperson.phone;
-                cout << myperson.phone;
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
                 //cout << "would you like to input person again? (y/n)";
@@ -348,6 +345,7 @@ class Gui{
                 break;
               //QUIT
               case(6):
+                book.Quit(book.getRoot(),outfile);
                 cout << "exiting..." << endl;
                 break;
               default:
@@ -362,7 +360,7 @@ int main(){
   ofstream outfile;
   outfile.open("PhoneBook.txt");
   Book book;
-  Gui newgui(book);
+  Gui newgui(book, outfile);
   //STILL TESTING
   //node * rootinMain = book.getRoot();
   outfile.close();
