@@ -269,9 +269,9 @@ public:
     if (mynode != nullptr)
     {
       Display(mynode->left);
-      cout <<setw(40)<<"LastName: " + mynode->person.last_name; 
-      cout <<setw(40)<<"FirstName: " + mynode->person.first_name;
-      cout <<"Number: " << mynode->person.phone; 
+      cout <<setw(10)<< mynode->person.last_name; 
+      cout <<setw(30)<< mynode->person.first_name;
+      cout <<setw(30)<< mynode->person.phone; 
       cout<< endl;
       Display(mynode->right);
     }
@@ -282,30 +282,33 @@ public:
     //Dump the list into a text file
     if (root != nullptr)
     {
-      outfile << root->person.last_name + "," + root->person.first_name + "," << root->person.phone << endl;
       Quit(root->left, outfile);
+      outfile << root->person.last_name + "," + root->person.first_name + "," << root->person.phone << endl;
       Quit(root->right, outfile);
     }
   }
   void Restore(ifstream &infile)
   {
+    Person temp;
+    root = nullptr; //clear out tree
     string line;
     while (getline(infile,line))
     {
-      //string last = line.substr(0,line.find(","));
-      //string first = line.substr(line.find(","),line.find_last_of(","));
-      //string num =line.substr(line.find_last_of(","),line.length());
-      //cout << first <<endl;//+ "  "+first
-
-
-      // string delimiter = ",";
-      // size_t pos = 0;
-      // std::string token;
-      // while ((pos = line.find(delimiter)) != std::string::npos) {
-      //   token = line.substr(0, pos);
-      //   std::cout << token << std::endl;
-      //   line.erase(0, pos + delimiter.length());
-      // }
+      string my_str = line;
+      vector<string> result;
+      stringstream s_stream(my_str); //create string stream from the string
+      while(s_stream.good()) {
+        string substr;
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        result.push_back(substr);
+      }
+      for(int i = 0; i<result.size(); i=1+3) {
+        temp.last_name=result.at(i);
+        temp.first_name=result.at(i+1);
+        temp.phone=result.at(i+2);
+        //cout << temp.first_name << temp.last_name << temp.phone << endl;
+        Add(getRoot(), temp);
+      }
     }
   }
 };
@@ -315,17 +318,15 @@ class Gui{
     Gui(Book book, ofstream& outfile){
       Person myperson;
       int number = 0; 
-      
       //Choices the Users have
-      cout << "Lab 3" << endl;
-      cout << "1 - add user" << endl;
-      cout << "2 - delete person" << endl;
-      cout << "3 - find person" << endl;
-      cout << "4 - change person" << endl;
-      cout << "5 - display book" << endl;
-      cout << "6 - quit" << endl;
-
       while(number != 6){
+          cout << "Lab 3" << endl;
+          cout << "1 - add user" << endl;
+          cout << "2 - delete person" << endl;
+          cout << "3 - find person" << endl;
+          cout << "4 - change person" << endl;
+          cout << "5 - display book" << endl;
+          cout << "6 - quit" << endl;
           cin.clear();
           fflush(stdin);
           cout << "Input: ";
@@ -343,7 +344,6 @@ class Gui{
                 getline(cin, myperson.phone);
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
-                //cout << "would you like to input person again? (y/n)";
                 break;
               //DELETE
               case(2):
@@ -359,7 +359,7 @@ class Gui{
               case(3):
                 cin.clear();
                 fflush(stdin);
-                cout << endl << "fname: ";
+                cout << "fname: ";
                 getline(cin, myperson.first_name);
                 cout << "lname: ";
                 getline(cin, myperson.last_name);
@@ -369,23 +369,26 @@ class Gui{
               case(4):
                 cin.clear();
                 fflush(stdin);
-                cout << endl << "fname: ";
+                cout << "fname: ";
                 getline(cin, myperson.first_name);
-                cout << endl << "lname: ";
+                cout << "lname: ";
                 getline(cin, myperson.last_name);
-                cout << endl << "pnumber: ";
+                cout << "pnumber: ";
                 getline(cin, myperson.phone);
                 book.Change(myperson.first_name, myperson.last_name, myperson.phone);
                 break;
               //DISPLAY
               case(5):
                 cout << "Displaying PhoneBook" << endl;
+                cout <<setw(10)<< "LastName: ";
+                cout <<setw(30)<< "FirstName: ";
+                cout <<setw(30)<< "Number: " << endl;
                 book.Display(book.getRoot());
                 break;
               //QUIT
               case(6):
                 book.Quit(book.getRoot(), outfile);
-                cout << "exiting..." << endl;
+                cout << "saving and exiting..." << endl;
                 break;
               default:
                 cout << "invalid selection!" << endl;
@@ -406,18 +409,18 @@ int main()
   // TEST Cases Code
   book.Add(book.getRoot(),Person("Greg","Barker","1234567891"));
   book.Add(book.getRoot(),Person("Mugs","Patel","1134567891"));
-  book.Add(book.getRoot(),Person("Gerg","Baker","1234567898"));
-  book.Add(book.getRoot(),Person("Sam","Benboy","2234567891"));
-  book.Add(book.getRoot(),Person("Tommy","Keegan","3234567891")); 
-  book.Add(book.getRoot(),Person("George","Barker","3334567891"));
-  book.Add(book.getRoot(),Person("Anna","Simonitis","5534567891"));
-  book.Add(book.getRoot(),Person("Anna","Lanz","6234567891"));
+  // book.Add(book.getRoot(),Person("Gerg","Baker","1234567898"));
+  // book.Add(book.getRoot(),Person("Sam","Benboy","2234567891"));
+  // book.Add(book.getRoot(),Person("Tommy","Keegan","3234567891")); 
+  // book.Add(book.getRoot(),Person("George","Barker","3334567891"));
+  // book.Add(book.getRoot(),Person("Anna","Simonitis","5534567891"));
+  // book.Add(book.getRoot(),Person("Anna","Lanz","6234567891"));
   book.Display(book.getRoot());
-  book.Delete(book.getRoot(),"Barker","Greg");
+  // book.Delete(book.getRoot(),"Barker","Greg");
   //book.Delete(book.getRoot(), "Simonitis", "Anna");
   //book.Delete(book.getRoot(), "Keegan", "Tommy");
   //book.Delete(book.getRoot(), "Barker", "Greg");
-  cout<<endl;
+  // cout<<endl;
   //book.Display(book.getRoot());  
   //book.Change("Greg","Barker",5);
   //book.Display(book.getRoot());
@@ -427,5 +430,6 @@ int main()
   infile.open("PhoneBook.txt");
   book.Restore(infile);
   infile.close();
+  book.Display(book.getRoot());
   return 0;
 }
