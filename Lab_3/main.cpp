@@ -204,7 +204,7 @@ public:
     return root;
   }
   //returns the number of the person that is being looked for
-  int Find(node *root, string first, string last)
+  string Find(node *root, string first, string last)
   {
     node *found = Search(getRoot(), first, last);
     if (found == nullptr)
@@ -249,7 +249,7 @@ public:
     return nullptr;
   }
   //Changes the number of the node that is found
-  void Change(string first, string last, unsigned long long int new_number)
+  void Change(string first, string last, string new_number)
   {
     //prolly use Search to make this easier
     node *found = Search(getRoot(), first, last);
@@ -404,14 +404,14 @@ int main()
   // outfile.close();
 
   // TEST Cases Code
-  book.Add(book.getRoot(),Person("Greg","Barker",1234567891));
-  book.Add(book.getRoot(),Person("Mugs","Patel",1134567891));
-  book.Add(book.getRoot(),Person("Gerg","Baker",1234567898));
-  book.Add(book.getRoot(),Person("Sam","Benboy",2234567891));
-  book.Add(book.getRoot(),Person("Tommy","Keegan",3234567891)); 
-  book.Add(book.getRoot(),Person("George","Barker",3334567891));
-  book.Add(book.getRoot(),Person("Anna","Simonitis",5534567891));
-  book.Add(book.getRoot(),Person("Anna","Lanz",6234567891));
+  book.Add(book.getRoot(),Person("Greg","Barker","1234567891"));
+  book.Add(book.getRoot(),Person("Mugs","Patel","1134567891"));
+  book.Add(book.getRoot(),Person("Gerg","Baker","1234567898"));
+  book.Add(book.getRoot(),Person("Sam","Benboy","2234567891"));
+  book.Add(book.getRoot(),Person("Tommy","Keegan","3234567891")); 
+  book.Add(book.getRoot(),Person("George","Barker","3334567891"));
+  book.Add(book.getRoot(),Person("Anna","Simonitis","5534567891"));
+  book.Add(book.getRoot(),Person("Anna","Lanz","6234567891"));
   book.Display(book.getRoot());
   book.Delete(book.getRoot(),"Barker","Greg");
   //book.Delete(book.getRoot(), "Simonitis", "Anna");
