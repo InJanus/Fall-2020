@@ -3,6 +3,7 @@
 //Gregory Barker
 //Homework 3, Data Structures and Algorithms
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include <stdio.h>
@@ -19,253 +20,294 @@ class Person{
       first_name = "A";
       phone = "1111111111";
     }
+    Person(string first,string last, string number)
+    { //constructor
+      last_name = last;
+      first_name = first;
+      phone = number;
+    }
 };
 
 struct node{
   Person person;
-  node*right = nullptr;
-  node*left = nullptr;
+  node *right = nullptr;
+  node *left = nullptr;
 };
 
 class Book{
-  private:
-    node* root;
-    int size;
-  public:
-    Book(){//constructor
-      size=0;
-      root = nullptr;
-    } 
-    ~Book(){
-      cout<< "no destructor statment implemented" << endl;
-    }; //Destructor FIXME
-    node* getRoot(){
-      return root;
-    }
-    //Adding an entire node basically
-    void Add(node* mynode,string first, string last,string number){
-      node* temp = new node;
-      temp->person.first_name=first;
-      temp->person.last_name=last;
-      temp->person.phone=number;
-      temp->left=nullptr;
-      temp->right=nullptr;
-      if(root == nullptr){
-        root = temp;
-      }
-      else{
-        if(last.compare(mynode->person.last_name)<0)
-        {
-          if(mynode->left==nullptr)
-          {
-            mynode->left=temp;
-          }
-          else{
-            //Destroy Temp here? Because memory Leak
-            Add(mynode->left,first,last,number);
-          }
-        }
-        else if(last.compare(mynode->person.last_name)>0)
-        {
-          if(mynode->right ==nullptr)
-          {
-            mynode->right = temp;
-          }
-          else{
-            //Destroy Temp here? Because memory Leak
-            Add(mynode->right,first,last,number);
-          }
-        }
-        else{
-          //FIXME handle the same last name case here
-        }
-      }
-    }
+private:
+  node *root;
+  int size;
 
-    void Add(node* mynode, Person tempperson){
-      //copy of add above but with person instead of each indivitual item 
-      node* temp = new node;
-      string first = tempperson.first_name;
-      string last = tempperson.last_name;
-      string number = tempperson.phone;
-      temp->person=tempperson;
-      temp->left=nullptr;
-      temp->right=nullptr;
-      if(root==nullptr){
-        root = temp;
-      }
-      else{
-        if(last.compare(mynode->person.last_name)<0)
-        {
-          if(mynode->left==nullptr)
-          {
-            mynode->left=temp;
-          }
-          else{
-            //Destroy Temp here? Because memory Leak
-            Add(mynode->left,first,last,number);
-          }
-        }
-        else if(last.compare(mynode->person.last_name)>0)
-        {
-          if(mynode->right ==nullptr)
-          {
-            mynode->right = temp;
-          }
-          else{
-            //Destroy Temp here? Because memory Leak
-            Add(mynode->right,first,last,number);
-          }
-        }
-        else{
-          //FIXME handle the same last name case here
-        }
-      }
-      
-
-    }
-    // Given a binary search tree, return the node with minimum 
-    // value found in that tree. This will be used in delete with two children
-    node* minNode(node* node) { 
-        struct node* current = node; 
-      
-        // loop down to find the leftmost leaf 
-        while (current && current->left != NULL) 
-            current = current->left; 
-      
-        return current; 
-    } 
-
-    //Delete the node but to check if it works return the new root
-    node* Delete(node* mynode, string last ,string first){ 
-    // bootstrap case 
-    if (root == NULL){
-      return root;
-    } 
-  
-    // Last name less than 
-    if (last < mynode->person.last_name){
-      mynode->left = Delete(mynode->left, last, first); 
-    }
-  
-    // Last name greater than
-    else if (last > mynode->person.last_name){
-      mynode->right = Delete(mynode->right, last, first); 
-    }
-  
-    // last name is the same as root's last name, then check first
-    else{ 
-      //First Name less
-      if (first < mynode->person.first_name){
-        mynode->left = Delete(mynode->left, last, first); 
-      }
-  
-      // First Name greater
-      else if (first > mynode->person.first_name){
-        mynode->right = Delete(mynode->right, last, first); 
-      }
-  
-        // if last name is the same as root's last name, then delete this node 
-        else{ 
-            // node with only one child or no child 
-            struct node* temp = new node();
-            if (mynode->left == nullptr){ 
-                temp = mynode->right; //FIXME - creates segmentation fault
-                free(mynode); 
-                return temp; 
-            } 
-            else if (mynode->right == nullptr) { 
-                temp = mynode->left; 
-                free(mynode); 
-                return temp; 
-            } 
-      
-            // node with two children: Get the inorder successor 
-            struct node* temp2 = minNode(mynode->right); 
-      
-            // Copy the inorder successor's content to this node 
-            mynode->person.last_name = temp2->person.last_name; 
-            mynode->person.first_name = temp2->person.first_name; 
-            mynode->person.phone = temp2->person.phone; 
-
-            // Delete the inorder successor 
-            mynode->right = Delete(mynode->right, temp2->person.last_name, temp2->person.first_name); 
-        } 
-    }
-    return mynode; 
-} 
-    //returns the number of the person
-    string Find(node* root, string first, string last){
-      node* found = Search(getRoot(),first, last);
-      if(found == nullptr)
-      {
-        //FIXME some sort of error messaging  //error propogation
-        //return here
-      }
-      return found->person.phone;
-    }
-    node* Search(node* root, string first, string last)
+public:
+  Book()
+  { //constructor
+    size = 0;
+    root = nullptr;
+    //FIXME reading from the file
+  }
+  ~Book()
+  {
+    cout << "no destructor statment implemented" << endl;
+  }; //Destructor FIXME
+  node *getRoot()
+  {
+    return root;
+  }
+  //Adding an entire node to the tree structure recursively
+  void Add(node *mynode, Person tempperson)
+  {
+    //copy of add above but with person instead of each indivitual item
+    node *temp = new node;
+    string first = tempperson.first_name;
+    string last = tempperson.last_name;
+    string number = tempperson.phone;
+    temp->person = tempperson;
+    temp->left = nullptr;
+    temp->right = nullptr;
+    if (root == nullptr)
     {
-      if(root == nullptr)
+      root = temp;
+    }
+    else
+    {
+      if (last.compare(mynode->person.last_name) < 0)
       {
-        return nullptr;
+        if (mynode->left == nullptr)
+        {
+          mynode->left = temp;
+        }
+        else
+        {
+          //Destroy Temp here? Because memory Leak
+          delete temp;
+          temp = nullptr;
+          Add(mynode->left, tempperson);
+        }
+      }
+      else if (last.compare(mynode->person.last_name) > 0)
+      {
+        if (mynode->right == nullptr)
+        {
+          mynode->right = temp;
+        }
+        else
+        {
+          //Destroy Temp here? Because memory Leak
+          delete temp;
+          temp = nullptr;
+          Add(mynode->right, tempperson);
+        }
       }
       else
       {
-        if(last.compare(root->person.last_name)== 0 && first.compare(root->person.first_name)==0)
+        //handle the same last name case here
+        if (first.compare(mynode->person.first_name) < 0)
         {
-          return root;
+          if (mynode->left == nullptr)
+          {
+            mynode->left = temp;
+          }
+          else
+          {
+            //Destroy Temp here? Because memory Leak
+            delete temp;
+            temp = nullptr;
+            Add(mynode->left, tempperson);
+          }
         }
-        else if (last.compare(root->person.last_name)<0)
+        else if (first.compare(mynode->person.first_name) > 0)
         {
-          return Search(root->left,first,last);
-        }
-        else if (last.compare(root->person.last_name)>0)
-        {
-          return Search(root->right,first,last);
-        }
-        else if (first.compare(root->person.first_name)<0)
-        {
-          return Search(root->left,first,last);
-        }
-        else if (first.compare(root->person.first_name)>0)
-        {
-          return Search(root->right,first,last);
+          if (mynode->right == nullptr)
+          {
+            mynode->right = temp;
+          }
+          else
+          {
+            //Destroy Temp here? Because memory Leak
+            delete temp;
+            temp = nullptr;
+            Add(mynode->right, tempperson);
+          }
         }
       }
+    }
+  }
+  // Given a binary search tree, return the node with minimum
+  // value found in that tree. This will be used in delete with two children
+  node *minNode(node *node)
+  {
+    struct node *current = node;
+
+    // loop down to find the leftmost leaf
+    while (current && current->left != NULL)
+      current = current->left;
+    return current;
+  }
+  //Delete the node but to check if it works return the new root
+  node *Delete(node *root, string last, string first)
+  {
+    // bootstrap case
+    if (root == NULL)
+    {
+      return root;
+    }
+    // Last name less than
+    if (last < root->person.last_name)
+    {
+      root->left = Delete(root->left, last, first);
+    }
+    // Last name greater than
+    else if (last > root->person.last_name)
+    {
+      root->right = Delete(root->right, last, first);
+    }
+    // last name is the same as root's last name, then check first
+    else
+    {
+      //First Name less
+      if (first < root->person.first_name)
+      {
+        root->left = Delete(root->left, last, first);
+      }
+      // First Name greater
+      else if (first > root->person.first_name)
+      {
+        root->right = Delete(root->right, last, first);
+      }
+      // if last name is the same as root's last name, then delete this node
+      else
+      {
+        // node with only one child or no child
+        if (root->left == NULL)
+        {
+          struct node *temp = root->right;
+          free(root);
+          return temp;
+        }
+        else if (root->right == NULL)
+        {
+          struct node *temp = root->left;
+          free(root);
+          return temp;
+        }
+        // node with two children: Get the inorder successor
+        struct node *temp = minNode(root->right);
+        // Copy the inorder successor's content to this node
+        root->person.last_name = temp->person.last_name;
+        root->person.first_name = temp->person.first_name;
+        root->person.phone = temp->person.phone;
+        // Delete the inorder successor
+        root->right = Delete(root->right, temp->person.last_name, temp->person.first_name);
+      }
+    }
+    return root;
+  }
+  //returns the number of the person that is being looked for
+  int Find(node *root, string first, string last)
+  {
+    node *found = Search(getRoot(), first, last);
+    if (found == nullptr)
+    {
+      //error messaging  //error propogation
+      cout<<"ERROR: NODE NOT FOUND"<<endl;
+      return 0;
+      //return here
+    }
+    return found->person.phone;
+  }
+  //Utility Function for finding nodes based off of first and last name. Used in Find and Change
+  node *Search(node *root, string first, string last)
+  {
+    if (root == nullptr)
+    {
       return nullptr;
     }
+    else
+    {
+      if (last.compare(root->person.last_name) == 0 && first.compare(root->person.first_name) == 0)
+      {
+        return root;
+      }
+      else if (last.compare(root->person.last_name) < 0)
+      {
+        return Search(root->left, first, last);
+      }
+      else if (last.compare(root->person.last_name) > 0)
+      {
+        return Search(root->right, first, last);
+      }
+      else if (first.compare(root->person.first_name) < 0)
+      {
+        return Search(root->left, first, last);
+      }
+      else if (first.compare(root->person.first_name) > 0)
+      {
+        return Search(root->right, first, last);
+      }
+    }
+    return nullptr;
+  }
+  //Changes the number of the node that is found
+  void Change(string first, string last, unsigned long long int new_number)
+  {
+    //prolly use Search to make this easier
+    node *found = Search(getRoot(), first, last);
+    if (found == nullptr)
+    {
+      //error messaging  //error propogation
+      cout<<"ERROR: NODE NOT FOUND"<<endl;
+      return;
+      //return here
+    }
+    found->person.phone = new_number;
+  }
+  //dump the whole list in alphabetical order in to the command line
+  void Display(node *mynode)
+  {
+    //using Inorder traversal
+    if (mynode != nullptr)
+    {
+      Display(mynode->left);
+      cout <<setw(40)<<"LastName: " + mynode->person.last_name; 
+      cout <<setw(40)<<"FirstName: " + mynode->person.first_name;
+      cout <<"Number: " << mynode->person.phone; 
+      cout<< endl;
+      Display(mynode->right);
+    }
+  }
+  //Saves to a outfile specified by the Gui. In our use case it should be PhoneBook.txt
+  void Quit(node *root, ofstream &outfile)
+  {
+    //Dump the list into a text file
+    if (root != nullptr)
+    {
+      outfile << root->person.last_name + "," + root->person.first_name + "," << root->person.phone << endl;
+      Quit(root->left, outfile);
+      Quit(root->right, outfile);
+    }
+  }
+  void Restore(ifstream &infile)
+  {
+    string line;
+    while (getline(infile,line))
+    {
+      //string last = line.substr(0,line.find(","));
+      //string first = line.substr(line.find(","),line.find_last_of(","));
+      //string num =line.substr(line.find_last_of(","),line.length());
+      //cout << first <<endl;//+ "  "+first
 
 
-    void Change(string first, string last, string new_number){
-      //prolly use Search to make this easier
-      node* found = Search(getRoot(),first,last);
-      if(found == nullptr)
-      {
-        //FIXME some sort of error messaging  //error propogation
-        //return here
-      }
-      found->person.phone = new_number;
+      // string delimiter = ",";
+      // size_t pos = 0;
+      // std::string token;
+      // while ((pos = line.find(delimiter)) != std::string::npos) {
+      //   token = line.substr(0, pos);
+      //   std::cout << token << std::endl;
+      //   line.erase(0, pos + delimiter.length());
+      // }
     }
-    //dump the whole list in alphabetical order 
-    void Display(node* mynode){
-      //using Inorder traversal
-      if(mynode != nullptr)
-      {
-        Display(mynode->left); //segmentation fault on delete nodes
-        cout << "LastName: "+mynode->person.last_name +"    FirstName: "+ mynode->person.first_name + "    Number: "<< mynode->person.phone <<endl;
-        Display(mynode->right);
-      }
-    }
-    void Quit(node* root, ofstream& outfile){
-      //Dump the list into a text file
-      if (root != nullptr){
-        outfile << root->person.last_name +","+ root->person.first_name+ ","<< root->person.phone << endl;
-        Quit(root->left, outfile);
-        Quit(root->right, outfile);
-      }
-    }
-    //User Interface 
+  }
 };
 
 class Gui{
@@ -353,13 +395,37 @@ class Gui{
         }
     };
 
-int main(){
+int main()
+{
+  Book book;
   ofstream outfile;
   outfile.open("PhoneBook.txt");
-  Book book;
-  Gui newgui(book, outfile);
-  //STILL TESTING
-  //node * rootinMain = book.getRoot();
+  // Gui newgui(book, outfile);
+  // outfile.close();
+
+  // TEST Cases Code
+  book.Add(book.getRoot(),Person("Greg","Barker",1234567891));
+  book.Add(book.getRoot(),Person("Mugs","Patel",1134567891));
+  book.Add(book.getRoot(),Person("Gerg","Baker",1234567898));
+  book.Add(book.getRoot(),Person("Sam","Benboy",2234567891));
+  book.Add(book.getRoot(),Person("Tommy","Keegan",3234567891)); 
+  book.Add(book.getRoot(),Person("George","Barker",3334567891));
+  book.Add(book.getRoot(),Person("Anna","Simonitis",5534567891));
+  book.Add(book.getRoot(),Person("Anna","Lanz",6234567891));
+  book.Display(book.getRoot());
+  book.Delete(book.getRoot(),"Barker","Greg");
+  //book.Delete(book.getRoot(), "Simonitis", "Anna");
+  //book.Delete(book.getRoot(), "Keegan", "Tommy");
+  //book.Delete(book.getRoot(), "Barker", "Greg");
+  cout<<endl;
+  //book.Display(book.getRoot());  
+  //book.Change("Greg","Barker",5);
+  //book.Display(book.getRoot());
+  book.Quit(book.getRoot(),outfile);
   outfile.close();
+  ifstream infile;
+  infile.open("PhoneBook.txt");
+  book.Restore(infile);
+  infile.close();
   return 0;
 }
