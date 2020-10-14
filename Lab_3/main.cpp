@@ -13,11 +13,11 @@ class Person{
   public: 
     string last_name;
     string first_name;
-    unsigned long long int phone;
+    string phone; //this should be a string because a integer takes a lot of data to store a full phone number
     Person(){  //constructor
       last_name = "Z";
       first_name = "A";
-      phone = 1111111111;
+      phone = "1111111111";
     }
 };
 
@@ -43,7 +43,7 @@ class Book{
       return root;
     }
     //Adding an entire node basically
-    void Add(node* mynode,string first, string last,unsigned long long int number){
+    void Add(node* mynode,string first, string last,string number){
       node* temp = new node;
       temp->person.first_name=first;
       temp->person.last_name=last;
@@ -80,8 +80,6 @@ class Book{
           //FIXME handle the same last name case here
         }
       }
-      
-
     }
 
     void Add(node* mynode, Person tempperson){
@@ -89,7 +87,7 @@ class Book{
       node* temp = new node;
       string first = tempperson.first_name;
       string last = tempperson.last_name;
-      unsigned long long int number = tempperson.phone;
+      string number = tempperson.phone;
       temp->person=tempperson;
       temp->left=nullptr;
       temp->right=nullptr;
@@ -139,64 +137,65 @@ class Book{
     } 
 
     //Delete the node but to check if it works return the new root
-    node* Delete(node* root, string last ,string first){ 
+    node* Delete(node* mynode, string last ,string first){ 
     // bootstrap case 
     if (root == NULL){
       return root;
     } 
   
     // Last name less than 
-    if (last < root->person.last_name){
-      root->left = Delete(root->left, last, first); 
+    if (last < mynode->person.last_name){
+      mynode->left = Delete(mynode->left, last, first); 
     }
   
     // Last name greater than
-    else if (last > root->person.last_name){
-      root->right = Delete(root->right, last, first); 
+    else if (last > mynode->person.last_name){
+      mynode->right = Delete(mynode->right, last, first); 
     }
   
     // last name is the same as root's last name, then check first
     else{ 
       //First Name less
-      if (first < root->person.first_name){
-        root->left = Delete(root->left, last, first); 
+      if (first < mynode->person.first_name){
+        mynode->left = Delete(mynode->left, last, first); 
       }
   
       // First Name greater
-      else if (first > root->person.first_name){
-        root->right = Delete(root->right, last, first); 
+      else if (first > mynode->person.first_name){
+        mynode->right = Delete(mynode->right, last, first); 
       }
   
         // if last name is the same as root's last name, then delete this node 
         else{ 
             // node with only one child or no child 
-            if (root->left == NULL){ 
-                struct node *temp = root->right; 
-                free(root); 
+            struct node* temp = new node();
+            if (mynode->left == nullptr){ 
+                temp = mynode->right; //FIXME - creates segmentation fault
+                free(mynode); 
                 return temp; 
             } 
-            else if (root->right == NULL) { 
-                struct node *temp = root->left; 
-                free(root); 
+            else if (mynode->right == nullptr) { 
+                temp = mynode->left; 
+                free(mynode); 
                 return temp; 
             } 
       
             // node with two children: Get the inorder successor 
-            struct node* temp = minNode(root->right); 
+            struct node* temp2 = minNode(mynode->right); 
       
             // Copy the inorder successor's content to this node 
-            root->person.last_name = temp->person.last_name; 
-            root->person.first_name = temp->person.first_name; 
-            root->person.phone = temp->person.phone; 
+            mynode->person.last_name = temp2->person.last_name; 
+            mynode->person.first_name = temp2->person.first_name; 
+            mynode->person.phone = temp2->person.phone; 
 
             // Delete the inorder successor 
-            root->right = Delete(root->right, temp->person.last_name, temp->person.first_name); 
+            mynode->right = Delete(mynode->right, temp2->person.last_name, temp2->person.first_name); 
         } 
     }
-    return root; 
+    return mynode; 
 } 
     //returns the number of the person
-    int Find(node* root, string first, string last){
+    string Find(node* root, string first, string last){
       node* found = Search(getRoot(),first, last);
       if(found == nullptr)
       {
@@ -238,7 +237,7 @@ class Book{
     }
 
 
-    void Change(string first, string last, unsigned long long int new_number){
+    void Change(string first, string last, string new_number){
       //prolly use Search to make this easier
       node* found = Search(getRoot(),first,last);
       if(found == nullptr)
@@ -253,7 +252,7 @@ class Book{
       //using Inorder traversal
       if(mynode != nullptr)
       {
-        Display(mynode->left);
+        Display(mynode->left); //segmentation fault on delete nodes
         cout << "LastName: "+mynode->person.last_name +"    FirstName: "+ mynode->person.first_name + "    Number: "<< mynode->person.phone <<endl;
         Display(mynode->right);
       }
@@ -271,7 +270,7 @@ class Book{
 
 class Gui{
   public:
-    Gui(Book book, ofstream outfile){
+    Gui(Book book, ofstream& outfile){
       Person myperson;
       int number = 0; 
       
@@ -299,7 +298,7 @@ class Gui{
                 cout << "lname: ";
                 getline (cin, myperson.last_name);
                 cout << "pnumber: ";
-                cin >> myperson.phone;
+                getline(cin, myperson.phone);
                 book.Add(book.getRoot(),myperson);
                 cout << "Added person" << endl;
                 //cout << "would you like to input person again? (y/n)";
@@ -308,9 +307,9 @@ class Gui{
               case(2):
                 cin.clear();
                 fflush(stdin);
-                cout << endl << "fname: ";
+                cout << "fname: ";
                 getline(cin, myperson.first_name);
-                cout << endl << "lname: ";
+                cout << "lname: ";
                 getline(cin, myperson.last_name);
                 book.Delete(book.getRoot() , myperson.last_name, myperson.first_name);
                 break;
@@ -320,7 +319,7 @@ class Gui{
                 fflush(stdin);
                 cout << endl << "fname: ";
                 getline(cin, myperson.first_name);
-                cout << endl << "lname: ";
+                cout << "lname: ";
                 getline(cin, myperson.last_name);
                 cout << "Phone number of found person: " << book.Find(book.getRoot(), myperson.first_name, myperson.last_name) << endl;
                 break;
@@ -333,9 +332,7 @@ class Gui{
                 cout << endl << "lname: ";
                 getline(cin, myperson.last_name);
                 cout << endl << "pnumber: ";
-                cin.clear();
-                fflush(stdin);
-                cin >> myperson.phone;
+                getline(cin, myperson.phone);
                 book.Change(myperson.first_name, myperson.last_name, myperson.phone);
                 break;
               //DISPLAY
@@ -345,12 +342,12 @@ class Gui{
                 break;
               //QUIT
               case(6):
-                book.Quit(book.getRoot(),outfile);
+                book.Quit(book.getRoot(), outfile);
                 cout << "exiting..." << endl;
                 break;
               default:
-                  cout << "invalid selection!" << endl;
-                  break;
+                cout << "invalid selection!" << endl;
+                break;
               }
           }
         }
