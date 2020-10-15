@@ -147,6 +147,8 @@ public:
   //Delete the node but to check if it works return the new root
   node *Delete(node *root, string last, string first)
   {
+    //NOTICE THIS CAN BE REPLACED WITH SEARCH HOWEVER TWO DIFFERENT PEOPLE
+    //WORKED ON EACH FUNCTION
     // bootstrap case
     if (root == NULL)
     {
@@ -175,7 +177,7 @@ public:
       {
         root->right = Delete(root->right, last, first);
       }
-      // if last name is the same as root's last name, then delete this node
+      // if first name is the same as root's first name also, then delete this node
       else
       {
         // node with only one child or no child
@@ -219,12 +221,14 @@ public:
   //Utility Function for finding nodes based off of first and last name. Used in Find and Change
   node *Search(node *root, string first, string last)
   {
+    //bootstrap case
     if (root == nullptr)
     {
       return nullptr;
     }
     else
     {
+      //Look at last name
       if (last.compare(root->person.last_name) == 0 && first.compare(root->person.first_name) == 0)
       {
         return root;
@@ -237,6 +241,7 @@ public:
       {
         return Search(root->right, first, last);
       }
+      //Look at first name
       else if (first.compare(root->person.first_name) < 0)
       {
         return Search(root->left, first, last);
@@ -312,6 +317,7 @@ public:
       }
     }
   }
+  //Get rid of node
   void destroy(node* mynode){
     if(mynode){
       destroy(mynode->left);
