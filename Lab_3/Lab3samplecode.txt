@@ -1,0 +1,269 @@
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Greg
+lname: Barker
+pnumber: 1234567891
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Gerg
+lname: Baker
+pnumber: 1234567898
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Sam
+lname: Benboy
+pnumber: 2234567898
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Tommy
+lname: Keegan
+pnumber: 2
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: George  
+invalid selection!
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: Barker
+invalid selection!
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: George
+lname: Barker
+pnumber: 6
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: Anna Simonits
+invalid selection!
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: Anna
+invalid selection!
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Anna
+lname: Simonitis
+pnumber: 9
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 1
+fname: Anna
+lname: Lanz
+pnumber: 69
+Added person
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 5
+Displaying PhoneBook
+LastName:                    FirstName:                       Number:
+     Baker                          Gerg                    1234567898
+    Barker                        George                             6
+    Barker                          Greg                    1234567891
+    Benboy                           Sam                    2234567898
+    Keegan                         Tommy                             2
+      Lanz                          Anna                            69
+ Simonitis                          Anna                             9
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 2
+fname: Anna
+lname: Lanz
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 5
+Displaying PhoneBook
+LastName:                    FirstName:                       Number:
+     Baker                          Gerg                    1234567898
+    Barker                        George                             6
+    Barker                          Greg                    1234567891
+    Benboy                           Sam                    2234567898
+    Keegan                         Tommy                             2
+ Simonitis                          Anna                             9
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 4
+fname: Anna
+lname: Simonitis
+pnumber: 5534567891
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 4
+fname: George
+lname: Barker
+pnumber: 3334567891
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 5
+Displaying PhoneBook
+LastName:                    FirstName:                       Number:
+     Baker                          Gerg                    1234567898
+    Barker                        George                    3334567891
+    Barker                          Greg                    1234567891
+    Benboy                           Sam                    2234567898
+    Keegan                         Tommy                             2
+ Simonitis                          Anna                    5534567891
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 3
+fname: Tommy
+lname: Keegan
+Phone number of found person: 2
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 6
+saving and exiting...
+
+HERE IS US RESTORING THAT FILE
+C:\Users\gbark\OneDrive\Desktop\Fall 2020\Advanced Data Structures\Fall-2020\Lab_3> cmd /C "c:\Users\gbark\.vscode\extensions\ms-vscode.cpptools-1.0.1\debugAdapters\bin\WindowsDebugLauncher.exe --stdin=Microsoft-MIEngine-In-ggn3re5o.zeg --stdout=Microsoft-MIEngine-Out-3nm4pudv.1ru --stderr=Microsoft-MIEngine-Error-daxeoayn.x0v --pid=Microsoft-MIEngine-Pid-as3xaeaf.mbk "--dbgExe=C:\Program Files\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin\gdb.exe" --interpreter=mi "
+Lab 3
+1 - add user
+2 - delete person    
+3 - find person      
+4 - change person    
+5 - display book     
+6 - quit
+7 - Restore from save
+Input: 7
+Lab 3
+1 - add user
+2 - delete person
+3 - find person
+4 - change person
+5 - display book
+6 - quit
+7 - Restore from save
+Input: 5
+Displaying PhoneBook
+LastName:                    FirstName:                       Number:
+     Baker                          Gerg                    1234567898
+    Barker                        George                    3334567891
+    Barker                          Greg                    1234567891
+    Benboy                           Sam                    2234567898
+    Keegan                         Tommy                             2
+ Simonitis                          Anna                    5534567891
