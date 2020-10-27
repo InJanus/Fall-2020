@@ -10,6 +10,9 @@
 #include <fstream>
 using namespace std;
 
+/* Design and implement the class Person, which represents the last name (first
+and last) and phone number of a person. You will store instances of this class in
+the phone book.*/
 class Person{
   public: 
     string last_name;
@@ -40,6 +43,11 @@ private:
   int size;
 
 public:
+/* Design and implement the class Book, which represents the phone book. The
+class should contain a binary search tree as a data member, where the key is the
+person’s name (when comparing keys first compare last names; then if last names
+are the same compare first names. You may assume that no two people have the
+same first and last names). This tree contains the people in the phone book. */
   Book()
   { //constructor
     size = 0;
@@ -79,7 +87,7 @@ public:
         }
         else
         {
-          //Destroy Temp here? Because memory Leak
+          //Destroying Temp here because memory leak
           delete temp;
           temp = nullptr;
           Add(mynode->left, tempperson);
@@ -93,7 +101,7 @@ public:
         }
         else
         {
-          //Destroy Temp here? Because memory Leak
+          //Destroying Temp here because memory leak
           delete temp;
           temp = nullptr;
           Add(mynode->right, tempperson);
@@ -110,7 +118,7 @@ public:
           }
           else
           {
-            //Destroy Temp here? Because memory Leak
+            //Destroying Temp here because memory leak
             delete temp;
             temp = nullptr;
             Add(mynode->left, tempperson);
@@ -124,7 +132,7 @@ public:
           }
           else
           {
-            //Destroy Temp here? Because memory Leak
+            //Destroying Temp here because memory leak
             delete temp;
             temp = nullptr;
             Add(mynode->right, tempperson);
@@ -267,7 +275,8 @@ public:
     }
     found->person.phone = new_number;
   }
-  //dump the whole list in alphabetical order in to the command line
+  /* Output names in alphabetical order (of last names and then first names if last
+  names are the same). */
   void Display(node *mynode)
   {
     //using Inorder traversal
@@ -292,6 +301,8 @@ public:
       Quit(root->right, outfile);
     }
   }
+
+  /*Add member functions that use a text file to save and restore tree*/
   void Restore(ifstream &infile)
   {
     Person temp;
@@ -317,7 +328,7 @@ public:
       }
     }
   }
-  //Get rid of node
+  //Recursively Removing Nodes using postorder
   void destroy(node* mynode){
     if(mynode){
       destroy(mynode->left);
@@ -327,9 +338,11 @@ public:
   }
 };
 
+/*Design and implement the class UserInterface, which provides the
+program’s user interface.*/
 class Gui{
   public:
-    Gui(Book book, ofstream& outfile){
+    Gui(Book book){
       Person myperson;
       int number = 0; 
       //Choices the Users have
@@ -341,6 +354,7 @@ class Gui{
           cout << "4 - change person" << endl;
           cout << "5 - display book" << endl;
           cout << "6 - quit" << endl;
+          cout << "7 - Restore from save" << endl;
           cin.clear();
           fflush(stdin);
           cout << "Input: ";
@@ -399,11 +413,31 @@ class Gui{
                 cout <<setw(30)<< "Number: " << endl;
                 book.Display(book.getRoot());
                 break;
+              //NOTICE: The brackets around case 6 allows for
+              //declaration of the ofstream file systems.
               //QUIT
               case(6):
+                {
+                ofstream outfile;
+                outfile.open("PhoneBook.txt");
                 book.Quit(book.getRoot(), outfile);
                 cout << "saving and exiting..." << endl;
+                outfile.close();
                 break;
+                }
+              //NOTICE: The brackets around case 7 allows for
+              //declaration of the instream file systems.
+              //RESTORE
+              case(7):
+              {
+                ifstream infile;
+                infile.open("PhoneBook.txt");
+                book = Book();
+                book.Display(book.getRoot());
+                book.Restore(infile);
+                infile.close();
+                break;
+              }
               default:
                 cout << "invalid selection!" << endl;
                 break;
@@ -415,21 +449,19 @@ class Gui{
 int main()
 {
   Book book;
-  ofstream outfile;
-  outfile.open("PhoneBook.txt");
-  // Gui newgui(book, outfile);
-  // outfile.close();
+
+  Gui newgui(book);
 
   // TEST Cases Code
-  book.Add(book.getRoot(),Person("Greg","Barker","1234567891"));
-  book.Add(book.getRoot(),Person("Mugs","Patel","1134567891"));
+  // book.Add(book.getRoot(),Person("Greg","Barker","1234567891"));
+  // book.Add(book.getRoot(),Person("Mugs","Patel","1134567891"));
   // book.Add(book.getRoot(),Person("Gerg","Baker","1234567898"));
   // book.Add(book.getRoot(),Person("Sam","Benboy","2234567891"));
   // book.Add(book.getRoot(),Person("Tommy","Keegan","3234567891")); 
   // book.Add(book.getRoot(),Person("George","Barker","3334567891"));
   // book.Add(book.getRoot(),Person("Anna","Simonitis","5534567891"));
   // book.Add(book.getRoot(),Person("Anna","Lanz","6234567891"));
-  book.Display(book.getRoot());
+  // book.Display(book.getRoot());
   // book.Delete(book.getRoot(),"Barker","Greg");
   //book.Delete(book.getRoot(), "Simonitis", "Anna");
   //book.Delete(book.getRoot(), "Keegan", "Tommy");
@@ -438,12 +470,12 @@ int main()
   //book.Display(book.getRoot());  
   //book.Change("Greg","Barker",5);
   //book.Display(book.getRoot());
-  book.Quit(book.getRoot(),outfile);
-  outfile.close();
-  ifstream infile;
-  infile.open("PhoneBook.txt");
-  book.Restore(infile);
-  infile.close();
-  book.Display(book.getRoot());
+  //book.Quit(book.getRoot(),outfile);
+  //outfile.close();
+  //ifstream infile;
+  //infile.open("PhoneBook.txt");
+  //book.Restore(infile);
+  //infile.close();
+  //book.Display(book.getRoot());
   return 0;
 }
