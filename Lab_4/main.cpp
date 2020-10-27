@@ -10,7 +10,8 @@
 #include <vector>
 using namespace std;
 
-struct node {
+class node {
+  public:
   string data;
   node* next = nullptr;
 };
@@ -24,22 +25,55 @@ class LL {
   LL() { head = nullptr; }
   node* getRoot() { return head; }
   node* Add(node* current, string input) {
+    // if(current == head && head == nullptr)
+    // {
+    //   node* head = new node;
+    //   head->data = input;
+    //   head->next = nullptr;
+    //   current = head;
+    //   return head;
+    // }
     if (current == nullptr) {
       //
-      node* temp = new node;
+      node *temp = new node();
       temp->data = input;
-      // prolly early return or something FIXME
+      temp->next = nullptr;
+      current = temp;
+      return current;
+
     } else {
       current->next = Add(current->next, input);
-      return current;
     }
+    return current;
   }
+  void append(node* current,string input)
+  {
+    node *temp = new node();
+    temp->data=input;
+    temp->next = nullptr;
+    
+    node *last = current;
+    if(current==nullptr)
+    {
+      current=temp;
+      return;
+    }
+    while(last->next != nullptr)
+    {
+      last=last->next;
+    }
+    last->next=temp;
+    return;
+  }
+
+
   void Delete(node* current, string searchVal) {
     // FIXME
   }
 
   void Print(node* current) {
-    if (current == NULL) {
+
+    if (current == nullptr) {
       return;
     }
     cout << current->data << " ";
@@ -53,7 +87,7 @@ class LL {
     if (current->data == searchVal) {
       return current;
     }
-    return Search(current->next, searchVal)
+    return Search(current->next, searchVal);
   }
 };
 
@@ -67,6 +101,12 @@ class DiGraph {
 };
 
 int main() { 
-  //test Add for LL
+  //test Add for LL FIXME
+  LL testlist;
+  node *root = testlist.getRoot();
+  testlist.Add(testlist.getRoot(),"4");
+  testlist.Add(testlist.getRoot(),"7");
+  testlist.Add(testlist.getRoot(),"5");
+  testlist.Print(testlist.getRoot());
   return 0; 
   }
