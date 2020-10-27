@@ -44,7 +44,6 @@ class LL {
     return;
   }
 
-
   void Delete(node* current, string searchVal) {
     // FIXME
   }
