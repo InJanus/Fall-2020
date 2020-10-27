@@ -3,6 +3,7 @@
 // Gregory Barker
 // Homework 4, Data Structures and Algorithms
 #include <stdio.h>
+
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -11,7 +12,7 @@
 using namespace std;
 
 class node {
-  public:
+ public:
   string data;
   node* next;
 };
@@ -24,33 +25,32 @@ class LL {
   // Constructor
   LL() { head = nullptr; }
   node* getRoot() { return head; }
-  void insert(node* current,string input)
-  {
-    node *temp = new node();
-    temp->data=input;
+  void Insert(node* current, string input) {
+    node* temp = new node();
+    temp->data = input;
     temp->next = nullptr;
-    
-    node *last = current;
-    if(head==nullptr)
-    {
-      head=temp;
+
+    node* last = current;
+    if (head == nullptr) {
+      head = temp;
       return;
     }
-    while(last->next != nullptr)
-    {
-      last=last->next;
+    while (last->next != nullptr) {
+      last = last->next;
     }
-    last->next=temp;
+    last->next = temp;
     return;
   }
 
   void Delete(node* current, string searchVal) {
-    free(Search(current, searchVal));
-    return;
+    node* found = Search(current, searchVal);
+    if (found == head) {
+      head = head->next;
+    }
+    free(found);
   }
 
   void Print(node* current) {
-
     if (current == nullptr) {
       return;
     }
@@ -71,6 +71,7 @@ class LL {
 
 class DiGraph {
  private:
+  
  public:
   // Constructor
   // Destructor
@@ -78,14 +79,16 @@ class DiGraph {
   // Edge deletion
 };
 
-int main() { 
-  //test Add for LL FIXME
+int main() {
+  // test Add for LL FIXME
   LL testlist;
-  node *root = testlist.getRoot();
-  testlist.insert(testlist.getRoot(),"4");
-  testlist.insert(testlist.getRoot(),"7");
-  testlist.insert(testlist.getRoot(),"5");
+  node* root = testlist.getRoot();
+  testlist.Insert(testlist.getRoot(), "4");
+  testlist.Insert(testlist.getRoot(), "7");
+  testlist.Insert(testlist.getRoot(), "5");
   testlist.Print(testlist.getRoot());
-  testlist.Search(testlist.getRoot(), "4");
-  return 0; 
-  }
+  cout << endl;
+  testlist.Delete(testlist.getRoot(), "4");
+  testlist.Print(testlist.getRoot());
+  return 0;
+}
