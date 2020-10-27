@@ -24,7 +24,7 @@ class LL {
   // Constructor
   LL() { head = nullptr; }
   node* getRoot() { return head; }
-  void append(node* current,string input)
+  void insert(node* current,string input)
   {
     node *temp = new node();
     temp->data=input;
@@ -45,7 +45,8 @@ class LL {
   }
 
   void Delete(node* current, string searchVal) {
-    // FIXME
+    free(Search(current, searchVal));
+    return;
   }
 
   void Print(node* current) {
@@ -81,9 +82,10 @@ int main() {
   //test Add for LL FIXME
   LL testlist;
   node *root = testlist.getRoot();
-  testlist.append(testlist.getRoot(),"4");
-  testlist.append(testlist.getRoot(),"7");
-  testlist.append(testlist.getRoot(),"5");
+  testlist.insert(testlist.getRoot(),"4");
+  testlist.insert(testlist.getRoot(),"7");
+  testlist.insert(testlist.getRoot(),"5");
   testlist.Print(testlist.getRoot());
+  testlist.Search(testlist.getRoot(), "4");
   return 0; 
   }
