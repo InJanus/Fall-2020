@@ -172,7 +172,34 @@ class DiGraph {
       }
     }
   }
+  void DFS(DiGraph graph, string v, LL visited){
+    //Mark the start node (v) as found
+    visited[v] = true;    
+    //look at every edge of v
+    for(neighbors so the next and before nodes){
+      // check if DFS has run on the neighbors
+      if(!visited[neighbor being checked]){
+        //If DFS not run recursively call function
+        DFS(graph, neighbor, visited)
+      }
+      //output v
+      return LL of answer;
+    }
+      }
+  //topological sorting
+  void topologicalSort(DiGraph graph){
+    int visited[];
+    //create a linked list that will store the DFS results
+    LL toplist = new LL;
 
+    //go through the entire graph and put
+    for(int i = 0; i < n; i++){
+      if(!visited[i]){
+        toplist = DFS(i)
+      }
+    }
+
+  }
   //Print the Digraph
   void Print() {
     for (int i = 0; i < actualSize; i++) {
