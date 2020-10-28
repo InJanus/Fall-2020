@@ -11,12 +11,14 @@
 using namespace std;
 const int SIZE = 200;
 
+//establish class node for use
 class node {
  public:
   string data;
   node* next;
 };
 
+//Linked List was specified in the document
 class LL {
  private:
   node* head;
@@ -28,19 +30,28 @@ class LL {
     head = nullptr;
     size = 0;
   }
-  node* getRoot() { return head; }
-  int getSize() { return size; }
+  //Get the head of the list
+  node* getRoot() { 
+    return head; 
+  }
+  //Get the size of the list
+  int getSize() { 
+    return size; 
+  }
+  //Insert a value to the list, in this case a string
   void Insert(node* current, string input) {
     node* temp = new node();
     temp->data = input;
     temp->next = nullptr;
 
     node* last = current;
+    //empty list case
     if (head == nullptr) {
       head = temp;
       size++;
       return;
     }
+    //look for the next "open" spot on the list
     while (last->next != nullptr) {
       last = last->next;
     }
@@ -49,6 +60,7 @@ class LL {
     return;
   }
 
+  //Delete a node from the array
   void Delete(node* current, string searchVal) {
     node* temp = head;
     node* prev = nullptr;
@@ -58,25 +70,34 @@ class LL {
       delete temp;
       return;
     }
+    //check if node doesn't exist in list
     while (temp != nullptr && temp->data != searchVal)
     {
       prev = temp;
       temp = temp->next;
     }
-    if (temp == nullptr) return;
+    //if node doesn't exist return
+    if (temp == nullptr){
+      return;
+    }
     prev->next = temp->next;
+    //actually get rid of temp
     delete temp;
+    //decrease size
     size--;
   }
 
+  //Print out the list 
   void Print(node* current) {
     if (current == nullptr) {
       return;
     }
     cout << current->data << " ";
+    //recursive to get the whole list
     Print(current->next);
   }
 
+  //Search for a specific node within the list
   node* Search(node* current, string searchVal) {
     if (current == nullptr) {
       return nullptr;
@@ -84,14 +105,17 @@ class LL {
     if (current->data == searchVal) {
       return current;
     }
+    //recursive call
     return Search(current->next, searchVal);
   }
+  //Delete Linked List 
   void DeleteLL(){
     node* current = head;
     node* next;
     while(current!= nullptr)
     {
       next=current->next;
+      //free up memory
       free(current);
       current=next;
     }
@@ -100,6 +124,7 @@ class LL {
   }
 };
 
+// Establish the Digraph
 class DiGraph {
  private:
   LL heads[SIZE];
@@ -117,11 +142,13 @@ class DiGraph {
         return;
       }
     }
+    //Utilize the linked list class to add in edge
     heads[actualSize].Insert(heads[actualSize].getRoot(), head);
     heads[actualSize].Insert(heads[actualSize].getRoot(), tail);
     actualSize++;
   }
 
+  //Delete Edge
   void delEdge(string head, string tail) {
     for(int i=0; i<actualSize; i++){
       //Finding head in the array of Heads
@@ -146,6 +173,7 @@ class DiGraph {
     }
   }
 
+  //Print the Digraph
   void Print() {
     for (int i = 0; i < actualSize; i++) {
       heads[i].Print(heads[i].getRoot());
@@ -153,7 +181,6 @@ class DiGraph {
     }
   }
   // Destructor
-  // Edge deletion
 };
 
 int main() {
