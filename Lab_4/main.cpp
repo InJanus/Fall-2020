@@ -207,7 +207,7 @@ class DiGraph {
     return LL();
   }
   //topological sorting
-  void topologicalSort(DiGraph graph){
+  LL topologicalSort(DiGraph graph){
     //int visited[]; imn now thingking that a global variable here will not work since it needs to be recursive
     //create a linked list that will store the DFS results
     LL toplist = LL(); //empty out list and delcare new list
@@ -218,8 +218,75 @@ class DiGraph {
         toplist = DFS(graph, to_string(i), toplist);
       }
     }
+    return toplist;
+  }
+
+  LL acycliccheck(DiGraph input){
+    //checks to see if it is acyclic. means it can be sorted
+    //find the drain
+    node* testingval = nullptr;
+    DiGraph tempgraph = input;
+    LL myreturn;
+    int mysize = actualSize;
+    string start = heads[0].getRoot()->next->data;
+    string remove = "";
+    int fixer = 0;
+    bool flag = false;
+    while(!flag){
+      fixer = 0;
+      remove = getdrain(heads[0].getRoot()->next->data);
+      myreturn.Insert(myreturn.getRoot(), remove);
+      for(int i = 0; i < size(tempgraph); i++){
+        if(tempgraph.heads[i].getRoot() == nullptr){
+          fixer = fixer + 1;
+        }
+        for(int j = 0; j < size(tempgraph); j++){ 
+          if(!testingval){
+            if(tempgraph.heads[j].getRoot()->next->data == remove && tempgraph.heads[j].getRoot()->next->next == nullptr){
+              testingval = tempgraph.heads[j].Search(tempgraph.heads[i].getRoot(), tempgraph.heads[j].getRoot()->data);
+              if(testingval){
+                myreturn.Insert(myreturn.getRoot(), tempgraph.heads[j].getRoot()->data);
+              }
+            } 
+          }
+        }
+
+        tempgraph.delEdge(tempgraph.heads[i-fixer].getRoot()->data, remove); //delete the node from the list
+      }
+      if(size(tempgraph) == 1){
+        myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->data);
+        flag = !flag;
+      }
+    }
+    return myreturn;
+  }
+
+  string getdrain(string inputtemp){
+    string temp = inputtemp;
+    node* tempnode;
+    bool flag = false;
+    while(!flag){
+      for(int i = 0; i < actualSize; i++){
+        if(temp == heads[i].getRoot()->data){
+          temp = heads[i].getRoot()->next->data;
+          break;
+        }
+        if(i == actualSize-1){
+          flag = !flag;
+        }
+      }
+    }
+    //cout << temp << endl;
+    return temp;
   }
   
+  int size(DiGraph input){
+    int i = 0;
+    while(input.heads[i].getRoot() != nullptr){
+      i++;
+    }
+    return i;
+  }
   
   //Print the Digraph
   void Print() {
@@ -232,7 +299,9 @@ class DiGraph {
 };
 
 int main() {
+  
   //ui programing
+  LL test3;
   DiGraph test2;
   bool flag = false; //exit checker
   int counter = 0; //starting list counter
@@ -270,6 +339,11 @@ int main() {
       test2.addEdge(temp[optone], temp[opttwo]);
     }
   }
+  test2.Print();
+  cout << "=========================== acycliccheck ===========================" << endl;
+  test3 = test2.acycliccheck(test2);
+  test3.Print(test3.getRoot());
+  
 
   //******LL TESTING******
   // LL testlist;
@@ -286,14 +360,20 @@ int main() {
   // cout << "SIZE: " << testlist.getSize() << endl;
 
 //******DiGraph TESTING******
+
   // DiGraph test;
-  // test.addEdge("5","3");
+  // LL test2;
+  // test.addEdge("5","0");
   // test.addEdge("5","2");
-  // test.addEdge("5","6");
-  // test.addEdge("6","3");
-  // test.delEdge("6","3");
+  // test.addEdge("2","3");
+  // test.addEdge("3","1");
+  // test.addEdge("4","0");
+  // test.addEdge("4","1");
+  // //test.addEdge("3","4");
+  
   // test.Print();
-  // test.topologicalSort(test);
-  // test.Print();
+  // test2 = test.acycliccheck(test);
+  // cout << endl;
+  // test2.Print(test2.getRoot());
   return 0;
 }
