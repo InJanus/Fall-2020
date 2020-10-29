@@ -128,6 +128,7 @@ class LL {
 class DiGraph {
  private:
   LL heads[SIZE];
+  bool llvisited[SIZE];
   int actualSize;
 
  public:
@@ -172,34 +173,54 @@ class DiGraph {
       }
     }
   }
-  void DFS(DiGraph graph, string v, LL visited){
+
+  
+  
+  LL DFS(DiGraph graph, string v, LL visited){
     //Mark the start node (v) as found
-    visited[v] = true;    
+    //we need to find the starting node in the list of LL
+
+    for(int i = 0; i < actualSize; i++){
+      if(graph.heads->getRoot()->data.compare(v)){
+        //finds the head of the list that matches the v term
+        //if this is true then visited should be ture acording to the paralell array
+        llvisited[i] = true;
+      }else{
+        //FIXME - not sure if i should set this to false by default or set this in thge constructor 
+        continue;
+      }
+    }
+    //actual size is needed for n inplementation  
+    //is implementation used for setting all variables the same value
     //look at every edge of v
-    for(neighbors so the next and before nodes){
+    //thinking about a couter to track what LL we are on
+    int counter = 0;
+    for(LL neighbors : heads){
       // check if DFS has run on the neighbors
-      if(!visited[neighbor being checked]){
+      if(!llvisited[counter]){
         //If DFS not run recursively call function
-        DFS(graph, neighbor, visited)
+        DFS(graph, neighbors.getRoot()->data, visited); //not sure if this is correct
       }
       //output v
-      return LL of answer;
+      return neighbors;
     }
-      }
+    return LL();
+  }
   //topological sorting
   void topologicalSort(DiGraph graph){
-    int visited[];
+    //int visited[]; imn now thingking that a global variable here will not work since it needs to be recursive
     //create a linked list that will store the DFS results
-    LL toplist = new LL;
+    LL toplist = LL(); //empty out list and delcare new list
 
     //go through the entire graph and put
-    for(int i = 0; i < n; i++){
-      if(!visited[i]){
-        toplist = DFS(i)
+    for(int i = 0; i < actualSize; i++){
+      if(!llvisited[i]){
+        toplist = DFS(graph, to_string(i), toplist);
       }
     }
-
   }
+  
+  
   //Print the Digraph
   void Print() {
     for (int i = 0; i < actualSize; i++) {
@@ -211,6 +232,45 @@ class DiGraph {
 };
 
 int main() {
+  //ui programing
+  DiGraph test2;
+  bool flag = false; //exit checker
+  int counter = 0; //starting list counter
+  string temp[SIZE];
+  cout << "Enter \"!\" to exit list enter" << endl;
+  while(!flag){
+    //enter data untill a stop has been reached
+    cout << counter << " : ";
+    getline(cin, temp[counter]); //input temp array for ordering list
+    
+    if(temp[counter] == "!"){ 
+      temp[counter] = "";
+      flag = !flag;
+      counter--;
+    } //exiting the loop
+    counter++;
+  }
+  flag = !flag;
+  cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
+  cout << "Enter -1 -1 to exit" << endl;
+  for(int i = 0; i < counter; i++){
+    cout << i << " : " << temp[i] << endl;
+  }
+  int optone, opttwo;
+  while(!flag){
+    //this loop is for entering the connections
+    //ex 1 2 would mean 1 is connected to 2
+    //i am avoiding to type string because this makes it hard to type everyting efficently
+    //hopefuly if we have time i can add this functionality to change this
+    cin >> optone >> opttwo; //insert with space inbetween for input
+    if(optone == -1 && opttwo == -1){ 
+      flag = !flag; 
+    }else{ //posibly check for range
+      cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
+      test2.addEdge(temp[optone], temp[opttwo]);
+    }
+  }
+
   //******LL TESTING******
   // LL testlist;
   // testlist.Insert(testlist.getRoot(), "4");
@@ -226,12 +286,14 @@ int main() {
   // cout << "SIZE: " << testlist.getSize() << endl;
 
 //******DiGraph TESTING******
-  DiGraph test;
-  test.addEdge("5", "3");
-  test.addEdge("5", "2");
-  test.addEdge("5","6");
-  test.addEdge("6", "3");
-  test.delEdge("6","3");
-  test.Print();
+  // DiGraph test;
+  // test.addEdge("5","3");
+  // test.addEdge("5","2");
+  // test.addEdge("5","6");
+  // test.addEdge("6","3");
+  // test.delEdge("6","3");
+  // test.Print();
+  // test.topologicalSort(test);
+  // test.Print();
   return 0;
 }
