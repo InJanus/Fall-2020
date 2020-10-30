@@ -264,7 +264,8 @@ class DiGraph {
 
         tempgraph.delEdge(tempgraph.heads[i-fixer].getRoot()->data, remove); //delete the node from the list
       }
-      if(size(tempgraph) == 1){
+      if(size(tempgraph) == 1 && !tempgraph.heads[0].getRoot()->next->next){
+        myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->next->data); //now to get an actual list you need to flip the list entirly
         myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->data);
         flag = !flag;
       }
@@ -312,53 +313,53 @@ class DiGraph {
 
 int main() {
   
-  // //ui programing
-  // LL test3;
-  // DiGraph test2;
-  // bool flag = false; //exit checker
-  // int counter = 0; //starting list counter
-  // string temp[SIZE];
+  //ui programing
+  LL test3;
+  DiGraph test2;
+  bool flag = false; //exit checker
+  int counter = 0; //starting list counter
+  string temp[SIZE];
 
-  // //to enter the list or do other delete functions add a start menu to the list
+  //to enter the list or do other delete functions add a start menu to the list
 
 
-  // cout << "Enter \"!\" to exit list enter" << endl;
-  // while(!flag){
-  //   //enter data untill a stop has been reached
-  //   cout << counter << " : ";
-  //   getline(cin, temp[counter]); //input temp array for ordering list
+  cout << "Enter \"!\" to exit list enter" << endl;
+  while(!flag){
+    //enter data untill a stop has been reached
+    cout << counter << " : ";
+    getline(cin, temp[counter]); //input temp array for ordering list
     
-  //   if(temp[counter] == "!"){ 
-  //     temp[counter] = "";
-  //     flag = !flag;
-  //     counter--;
-  //   } //exiting the loop
-  //   counter++;
-  // }
-  // flag = !flag;
-  // cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
-  // cout << "Enter -1 -1 to exit" << endl;
-  // for(int i = 0; i < counter; i++){
-  //   cout << i << " : " << temp[i] << endl;
-  // }
-  // int optone, opttwo;
-  // while(!flag){
-  //   //this loop is for entering the connections
-  //   //ex 1 2 would mean 1 is connected to 2
-  //   //i am avoiding to type string because this makes it hard to type everyting efficently
-  //   //hopefuly if we have time i can add this functionality to change this
-  //   cin >> optone >> opttwo; //insert with space inbetween for input
-  //   if(optone == -1 && opttwo == -1){ 
-  //     flag = !flag; 
-  //   }else{ //posibly check for range
-  //     cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
-  //     test2.addEdge(temp[optone], temp[opttwo]);
-  //   }
-  // }
-  // test2.Print();
-  // cout << "=========================== acycliccheck ===========================" << endl;
-  // test3 = test2.acycliccheck(test2);
-  // test3.Print(test3.getRoot());
+    if(temp[counter] == "!"){ 
+      temp[counter] = "";
+      flag = !flag;
+      counter--;
+    } //exiting the loop
+    counter++;
+  }
+  flag = !flag;
+  cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
+  cout << "Enter -1 -1 to exit" << endl;
+  for(int i = 0; i < counter; i++){
+    cout << i << " : " << temp[i] << endl;
+  }
+  int optone, opttwo;
+  while(!flag){
+    //this loop is for entering the connections
+    //ex 1 2 would mean 1 is connected to 2
+    //i am avoiding to type string because this makes it hard to type everyting efficently
+    //hopefuly if we have time i can add this functionality to change this
+    cin >> optone >> opttwo; //insert with space inbetween for input
+    if(optone == -1 && opttwo == -1){ 
+      flag = !flag; 
+    }else{ //posibly check for range
+      cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
+      test2.addEdge(temp[optone], temp[opttwo]);
+    }
+  }
+  test2.Print();
+  cout << "=========================== acycliccheck ===========================" << endl;
+  test3 = test2.acycliccheck(test2);
+  test3.Print(test3.getRoot());
   
 
   //******LL TESTING******
@@ -377,19 +378,19 @@ int main() {
 
 //******DiGraph TESTING******
 
-  DiGraph test;
-  LL test2;
-  test.addEdge("5","0");
-  test.addEdge("5","2");
-  test.addEdge("2","3");
-  test.addEdge("3","1");
-  test.addEdge("4","0");
-  test.addEdge("4","1");
-  //test.addEdge("3","4");
+  // DiGraph test;
+  // LL test2;
+  // test.addEdge("5","0");
+  // test.addEdge("5","2");
+  // test.addEdge("2","3");
+  // test.addEdge("3","1");
+  // test.addEdge("4","0");
+  // test.addEdge("4","1");
+  // //test.addEdge("3","4");
   
-  test.Print();
-  test2 = test.acycliccheck(test);
-  cout << endl;
-  test2.Print(test2.getRoot());
+  // test.Print();
+  // test2 = test.acycliccheck(test);
+  // cout << endl;
+  // test2.Print(test2.getRoot());
   return 0;
 }
