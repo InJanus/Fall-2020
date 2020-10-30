@@ -206,7 +206,8 @@ class DiGraph {
     }
     return LL();
   }
-  //topological sorting
+  //Topological Sort is a linear ordering of its vertices such that for every directed edge (u,v) 
+  //from vertex u to vertex v u comes before v in the ordering. 
   LL topologicalSort(DiGraph graph){
     //int visited[]; imn now thingking that a global variable here will not work since it needs to be recursive
     //create a linked list that will store the DFS results
