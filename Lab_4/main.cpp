@@ -122,6 +122,20 @@ class LL {
     head = nullptr;
     size=0;
   }
+
+  LL flip(LL fliplist){
+    LL templist = LL();
+    node* tempitem = new node();
+    for(int i = fliplist.getSize()-1; i >= 0; i--){
+      tempitem = fliplist.getRoot();
+      for(int j = 0; j < i; j++){
+        tempitem = tempitem->next;
+      }
+      templist.Insert(templist.getRoot(), tempitem->data);
+    }
+    return templist;
+  }
+
 };
 
 // Establish the Digraph
@@ -174,8 +188,6 @@ class DiGraph {
     }
   }
 
-  
-  
   LL DFS(DiGraph graph, string v, LL visited){
     //Mark the start node (v) as found
     //we need to find the starting node in the list of LL
@@ -224,60 +236,78 @@ class DiGraph {
   LL acycliccheck(DiGraph input){
     //checks to see if it is acyclic. means it can be sorted
     //find the drain
-    node* testingval = nullptr;
-    DiGraph tempgraph = input;
-    LL myreturn;
-    int mysize;
-    string start = heads[0].getRoot()->next->data;
-    string remove = "";
-    int fixer = 0;
-    bool flag = false;
-    while(!flag){
-      fixer = 0;
-      //cout << endl;
-      //this->Print();
-      remove = getdrain(heads[0].getRoot()->next->data);
-      myreturn.Insert(myreturn.getRoot(), remove);
-      testingval = nullptr;
-      //myreturn.Print(myreturn.getRoot());
-      mysize = size(tempgraph);
-      for(int i = 0; i < mysize; i++){
-        if(tempgraph.heads[i].getRoot() == nullptr){
-          fixer = fixer + 1;
+
+    try{
+      int timeoutcounter = SIZE;
+      node* testingval = nullptr;
+      DiGraph tempgraph = input;
+      LL myreturn;
+      int mysize;
+      if(heads[0].getRoot()){
+        string start = heads[0].getRoot()->next->data;
+      }else{
+        cout << "List is empty" << endl;
+        return LL();
+      }
+      string remove = "";
+      int fixer = 0;
+      bool flag = false;
+      while(!flag){
+
+        fixer = 0;
+        //cout << endl;
+        //this->Print();
+        remove = getdrain(heads[0].getRoot()->next->data);
+        myreturn.Insert(myreturn.getRoot(), remove);
+        testingval = nullptr;
+        //myreturn.Print(myreturn.getRoot());
+        mysize = size(tempgraph);
+        for(int i = 0; i < mysize; i++){
+          if(tempgraph.heads[i].getRoot() == nullptr){
+            fixer = fixer + 1;
+          }
+
+          if(tempgraph.heads[i-fixer].getRoot()->next->data == remove && tempgraph.heads[i-fixer].getRoot()->next->next == nullptr){
+            for(int n = 0; n < size(tempgraph); n++){
+              testingval = tempgraph.heads[n].Search(tempgraph.heads[n].getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
+              if(n == (i-fixer)){
+                testingval = nullptr;
+              }
+              if(testingval){
+                break;
+              }
+            }
+            if(!testingval){
+              myreturn.Insert(myreturn.getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
+            }
+          }
+          tempgraph.delEdge(tempgraph.heads[i-fixer].getRoot()->data, remove); //delete the node from the list
         }
-
-        if(tempgraph.heads[i-fixer].getRoot()->next->data == remove && tempgraph.heads[i-fixer].getRoot()->next->next == nullptr){
-          for(int n = 0; n < size(tempgraph); n++){
-            testingval = tempgraph.heads[n].Search(tempgraph.heads[n].getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
-            if(n == (i-fixer)){
-              testingval = nullptr;
-            }
-            if(testingval){
-              break;
-            }
-          }
-          
-          if(!testingval){
-            myreturn.Insert(myreturn.getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
-          }
-        } 
-
-        tempgraph.delEdge(tempgraph.heads[i-fixer].getRoot()->data, remove); //delete the node from the list
+        if(size(tempgraph) == 1 && !tempgraph.heads[0].getRoot()->next->next){
+          myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->next->data); //now to get an actual list you need to flip the list entirly
+          myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->data);
+          flag = !flag;
+        }
       }
-      if(size(tempgraph) == 1 && !tempgraph.heads[0].getRoot()->next->next){
-        myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->next->data); //now to get an actual list you need to flip the list entirly
-        myreturn.Insert(myreturn.getRoot(), tempgraph.heads[0].getRoot()->data);
-        flag = !flag;
-      }
+      return myreturn;
+    }catch(int e){
+      cout << "Items are not Acyclic" << endl;
+      cout << e << endl;
+      return LL();
     }
-    return myreturn;
   }
 
   string getdrain(string inputtemp){
     string temp = inputtemp;
     node* tempnode;
     bool flag = false;
+    int timeoutcounter = SIZE;
     while(!flag){
+      timeoutcounter--;
+      if(timeoutcounter == 0){
+        flag = !flag;
+        cout << "Items are not Acyclic" << endl;
+      }
       for(int i = 0; i < actualSize; i++){
         if(temp == heads[i].getRoot()->data){
           temp = heads[i].getRoot()->next->data;
@@ -317,49 +347,92 @@ int main() {
   LL test3;
   DiGraph test2;
   bool flag = false; //exit checker
+  bool menuflag = false;
   int counter = 0; //starting list counter
   string temp[SIZE];
+  int menuinput;
 
   //to enter the list or do other delete functions add a start menu to the list
+  while(!menuflag){
+    cout << "homework 4" << endl;
+    cout << "1 - insert items" << endl;
+    cout << "2 - delete items" << endl;
+    cout << "3 - get acyclic check and exit" << endl; //only can be run once, for some reason it destories the list once it runs once. i could make this work but im lazy
+    cout << "4 - print items" << endl;
+    cout << "5 - exit" << endl;
+    cin >> menuinput; // enter menu and going to switch statment
 
 
-  cout << "Enter \"!\" to exit list enter" << endl;
-  while(!flag){
-    //enter data untill a stop has been reached
-    cout << counter << " : ";
-    getline(cin, temp[counter]); //input temp array for ordering list
-    
-    if(temp[counter] == "!"){ 
-      temp[counter] = "";
+    if(menuinput == 1){
+      cin.clear();
+      fflush(stdin);
+      cout << "Enter \"!\" to exit list enter" << endl;
+      while(!flag){
+        //enter data untill a stop has been reached
+        cout << counter << " : ";
+        getline(cin, temp[counter]); //input temp array for ordering list
+        
+        if(temp[counter] == "!"){ 
+          temp[counter] = "";
+          flag = !flag;
+          counter--;
+        } //exiting the loop
+        counter++;
+      }
       flag = !flag;
-      counter--;
-    } //exiting the loop
-    counter++;
-  }
-  flag = !flag;
-  cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
-  cout << "Enter -1 -1 to exit" << endl;
-  for(int i = 0; i < counter; i++){
-    cout << i << " : " << temp[i] << endl;
-  }
-  int optone, opttwo;
-  while(!flag){
-    //this loop is for entering the connections
-    //ex 1 2 would mean 1 is connected to 2
-    //i am avoiding to type string because this makes it hard to type everyting efficently
-    //hopefuly if we have time i can add this functionality to change this
-    cin >> optone >> opttwo; //insert with space inbetween for input
-    if(optone == -1 && opttwo == -1){ 
-      flag = !flag; 
-    }else{ //posibly check for range
-      cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
-      test2.addEdge(temp[optone], temp[opttwo]);
+      cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
+      cout << "Enter -1 -1 to exit" << endl;
+      for(int i = 0; i < counter; i++){
+        cout << i << " : " << temp[i] << endl;
+      }
+      int optone, opttwo;
+      while(!flag){
+        //this loop is for entering the connections
+        //ex 1 2 would mean 1 is connected to 2
+        //i am avoiding to type string because this makes it hard to type everyting efficently
+        //hopefuly if we have time i can add this functionality to change this
+        cin >> optone >> opttwo; //insert with space inbetween for input
+        if(optone == -1 && opttwo == -1){ 
+          flag = !flag; 
+        }else{ //posibly check for range
+          cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
+          test2.addEdge(temp[optone], temp[opttwo]);
+        }
+      }
+    }else if(menuinput == 2){
+      cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
+      cout << "Enter -1 -1 to exit" << endl;
+      for(int i = 0; i < counter; i++){
+        cout << i << " : " << temp[i] << endl;
+      }
+      int optone, opttwo;
+      //this loop is for entering the connections
+      //ex 1 2 would mean 1 is connected to 2
+      //i am avoiding to type string because this makes it hard to type everyting efficently
+      //hopefuly if we have time i can add this functionality to change this
+      cin >> optone >> opttwo; //insert with space inbetween for input
+      if(optone == -1 && opttwo == -1){ 
+        flag = !flag; 
+      }else{ //posibly check for range
+        cout << "deleted: " << temp[optone] << " " << temp[opttwo] << endl;
+        test2.delEdge(temp[optone], temp[opttwo]);
+      }
+    }else if(menuinput == 3){
+      cout << "=========================== acycliccheck ===========================" << endl;
+      test3 = test2.acycliccheck(test2);
+      test3 = test3.flip(test3);
+      test3.Print(test3.getRoot());
+      cout << endl << "====================================================================" << endl;
+      menuflag = !menuflag;
+    }else if(menuinput == 4){
+      test2.Print();
+    }else if(menuinput == 5){
+      menuflag = !menuflag;
+    }else{
+      cout << "not a valid input" << endl;
     }
+
   }
-  test2.Print();
-  cout << "=========================== acycliccheck ===========================" << endl;
-  test3 = test2.acycliccheck(test2);
-  test3.Print(test3.getRoot());
   
 
   //******LL TESTING******
@@ -392,5 +465,7 @@ int main() {
   // test2 = test.acycliccheck(test);
   // cout << endl;
   // test2.Print(test2.getRoot());
+  // cout << endl;
+  // test2.flip(test2);
   return 0;
 }
