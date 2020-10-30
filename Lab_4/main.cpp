@@ -227,29 +227,40 @@ class DiGraph {
     node* testingval = nullptr;
     DiGraph tempgraph = input;
     LL myreturn;
-    int mysize = actualSize;
+    int mysize;
     string start = heads[0].getRoot()->next->data;
     string remove = "";
     int fixer = 0;
     bool flag = false;
     while(!flag){
       fixer = 0;
+      //cout << endl;
+      //this->Print();
       remove = getdrain(heads[0].getRoot()->next->data);
       myreturn.Insert(myreturn.getRoot(), remove);
-      for(int i = 0; i < size(tempgraph); i++){
+      testingval = nullptr;
+      //myreturn.Print(myreturn.getRoot());
+      mysize = size(tempgraph);
+      for(int i = 0; i < mysize; i++){
         if(tempgraph.heads[i].getRoot() == nullptr){
           fixer = fixer + 1;
         }
-        for(int j = 0; j < size(tempgraph); j++){ 
-          if(!testingval){
-            if(tempgraph.heads[j].getRoot()->next->data == remove && tempgraph.heads[j].getRoot()->next->next == nullptr){
-              testingval = tempgraph.heads[j].Search(tempgraph.heads[i].getRoot(), tempgraph.heads[j].getRoot()->data);
-              if(testingval){
-                myreturn.Insert(myreturn.getRoot(), tempgraph.heads[j].getRoot()->data);
-              }
-            } 
+
+        if(tempgraph.heads[i-fixer].getRoot()->next->data == remove && tempgraph.heads[i-fixer].getRoot()->next->next == nullptr){
+          for(int n = 0; n < size(tempgraph); n++){
+            testingval = tempgraph.heads[n].Search(tempgraph.heads[n].getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
+            if(n == (i-fixer)){
+              testingval = nullptr;
+            }
+            if(testingval){
+              break;
+            }
           }
-        }
+          
+          if(!testingval){
+            myreturn.Insert(myreturn.getRoot(), tempgraph.heads[i-fixer].getRoot()->data);
+          }
+        } 
 
         tempgraph.delEdge(tempgraph.heads[i-fixer].getRoot()->data, remove); //delete the node from the list
       }
@@ -276,6 +287,7 @@ class DiGraph {
         }
       }
     }
+    //comment out for production version
     //cout << temp << endl;
     return temp;
   }
@@ -300,49 +312,53 @@ class DiGraph {
 
 int main() {
   
-  //ui programing
-  LL test3;
-  DiGraph test2;
-  bool flag = false; //exit checker
-  int counter = 0; //starting list counter
-  string temp[SIZE];
-  cout << "Enter \"!\" to exit list enter" << endl;
-  while(!flag){
-    //enter data untill a stop has been reached
-    cout << counter << " : ";
-    getline(cin, temp[counter]); //input temp array for ordering list
+  // //ui programing
+  // LL test3;
+  // DiGraph test2;
+  // bool flag = false; //exit checker
+  // int counter = 0; //starting list counter
+  // string temp[SIZE];
+
+  // //to enter the list or do other delete functions add a start menu to the list
+
+
+  // cout << "Enter \"!\" to exit list enter" << endl;
+  // while(!flag){
+  //   //enter data untill a stop has been reached
+  //   cout << counter << " : ";
+  //   getline(cin, temp[counter]); //input temp array for ordering list
     
-    if(temp[counter] == "!"){ 
-      temp[counter] = "";
-      flag = !flag;
-      counter--;
-    } //exiting the loop
-    counter++;
-  }
-  flag = !flag;
-  cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
-  cout << "Enter -1 -1 to exit" << endl;
-  for(int i = 0; i < counter; i++){
-    cout << i << " : " << temp[i] << endl;
-  }
-  int optone, opttwo;
-  while(!flag){
-    //this loop is for entering the connections
-    //ex 1 2 would mean 1 is connected to 2
-    //i am avoiding to type string because this makes it hard to type everyting efficently
-    //hopefuly if we have time i can add this functionality to change this
-    cin >> optone >> opttwo; //insert with space inbetween for input
-    if(optone == -1 && opttwo == -1){ 
-      flag = !flag; 
-    }else{ //posibly check for range
-      cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
-      test2.addEdge(temp[optone], temp[opttwo]);
-    }
-  }
-  test2.Print();
-  cout << "=========================== acycliccheck ===========================" << endl;
-  test3 = test2.acycliccheck(test2);
-  test3.Print(test3.getRoot());
+  //   if(temp[counter] == "!"){ 
+  //     temp[counter] = "";
+  //     flag = !flag;
+  //     counter--;
+  //   } //exiting the loop
+  //   counter++;
+  // }
+  // flag = !flag;
+  // cout << "Enter list items with spaces inbetween, ie \"1 2\", this means item 1 is the source to item 2" << endl;
+  // cout << "Enter -1 -1 to exit" << endl;
+  // for(int i = 0; i < counter; i++){
+  //   cout << i << " : " << temp[i] << endl;
+  // }
+  // int optone, opttwo;
+  // while(!flag){
+  //   //this loop is for entering the connections
+  //   //ex 1 2 would mean 1 is connected to 2
+  //   //i am avoiding to type string because this makes it hard to type everyting efficently
+  //   //hopefuly if we have time i can add this functionality to change this
+  //   cin >> optone >> opttwo; //insert with space inbetween for input
+  //   if(optone == -1 && opttwo == -1){ 
+  //     flag = !flag; 
+  //   }else{ //posibly check for range
+  //     cout << "added: " << temp[optone] << " " << temp[opttwo] << endl;
+  //     test2.addEdge(temp[optone], temp[opttwo]);
+  //   }
+  // }
+  // test2.Print();
+  // cout << "=========================== acycliccheck ===========================" << endl;
+  // test3 = test2.acycliccheck(test2);
+  // test3.Print(test3.getRoot());
   
 
   //******LL TESTING******
@@ -361,19 +377,19 @@ int main() {
 
 //******DiGraph TESTING******
 
-  // DiGraph test;
-  // LL test2;
-  // test.addEdge("5","0");
-  // test.addEdge("5","2");
-  // test.addEdge("2","3");
-  // test.addEdge("3","1");
-  // test.addEdge("4","0");
-  // test.addEdge("4","1");
-  // //test.addEdge("3","4");
+  DiGraph test;
+  LL test2;
+  test.addEdge("5","0");
+  test.addEdge("5","2");
+  test.addEdge("2","3");
+  test.addEdge("3","1");
+  test.addEdge("4","0");
+  test.addEdge("4","1");
+  //test.addEdge("3","4");
   
-  // test.Print();
-  // test2 = test.acycliccheck(test);
-  // cout << endl;
-  // test2.Print(test2.getRoot());
+  test.Print();
+  test2 = test.acycliccheck(test);
+  cout << endl;
+  test2.Print(test2.getRoot());
   return 0;
 }
